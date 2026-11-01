@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بيتي · Beity</title>
+<meta name="description" content="القطعة بتحكيلك حكايتها في المتحف المصري الكبير، وبعدين بتعزمك تزور بيتها الأصلي.">
+<meta name="theme-color" content="#14110e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14110e; --panel:#1d1915; --panel2:#262019; --line:#3a3128;
+  --text:#f3ead9; --muted:#b5a68e; --gold:#e3aa4f; --gold2:#f6cf86;
+  --nile:#4f8fe6; --ok:#6cc58a; --danger:#e07a5f;
+  --r:16px; --nav:68px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{min-height:100dvh;padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom))}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(20,17,14,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.logo{display:flex;align-items:baseline;gap:8px}
+.logo b{font-size:26px;font-weight:800;color:var(--gold)}
+.logo span{font-size:13px;color:var(--muted)}
+.lang{margin-inline-start:auto;display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;padding:4px 12px;font-size:13px;color:var(--muted)}
+.lang button.on{background:var(--gold);color:#1b140a;font-weight:700}
+
+.hero{padding:22px 0 8px}
+.hero h1{font-size:clamp(24px,6vw,34px);line-height:1.35;margin:0 0 8px;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{margin:0;color:var(--muted);line-height:1.8}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.ok{background:var(--ok)}
+
+.search{display:flex;gap:8px;margin:18px 0 14px}
+.search input{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none}
+.search input:focus{border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.pc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px;text-align:start;display:flex;flex-direction:column;gap:8px;transition:.15s}
+.pc:hover{border-color:var(--gold)}
+.pc .code{font-size:12px;color:var(--gold);letter-spacing:.05em}
+.pc .nm{font-weight:700;line-height:1.5}
+.pc .hl{font-size:12px;color:var(--muted)}
+.pc .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:12px;color:var(--muted)}
+.heart{color:var(--gold)}
+.av{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:800;background:linear-gradient(135deg,#3a2b17,#5c4320);color:var(--gold2);flex:none}
+
+h2.sec{font-size:20px;margin:22px 0 4px}
+p.sub{color:var(--muted);margin:0 0 14px;line-height:1.7}
+
+/* map */
+.mapbox{background:#10151c;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:14px}
+.mapbox svg{display:block;width:100%;height:auto;direction:ltr}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-inline-end:4px}
+.pin{cursor:pointer}
+.pin circle.c{fill:var(--gold);stroke:#1b140a;stroke-width:2;transition:r .15s}
+.pin.loved circle.c{fill:#ff8f6b}
+.pin.sel circle.halo{opacity:1}
+.pin circle.halo{fill:none;stroke:var(--gold2);stroke-width:2;opacity:0}
+.pin text{font-size:14px;font-weight:800;fill:#1b140a;pointer-events:none}
+.pin .lbl{fill:var(--text);font-weight:700;font-size:17px;paint-order:stroke;stroke:#10151c;stroke-width:4px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:14px}
+.card .meta{font-size:12px;color:var(--muted)}
+.card h3{margin:4px 0 6px;font-size:20px}
+.card p{line-height:1.8;margin:6px 0}
+.stats{display:flex;gap:18px;margin:10px 0}
+.stats b{display:block;font-size:20px;color:var(--gold)}
+.stats span{font-size:12px;color:var(--muted)}
+.plist{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.pitem{display:flex;align-items:center;gap:10px;background:var(--panel2);border-radius:12px;padding:8px 10px}
+.pitem .t{flex:1;min-width:0}
+.pitem .t div{font-weight:700;font-size:14px}
+.pitem .t small{color:var(--muted)}
+.btn{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:8px 12px;font-size:13px}
+.btn:hover{border-color:var(--gold)}
+a.btn{color:var(--text);text-decoration:none;display:inline-block}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1b140a;font-weight:700}
+.btn.on{border-color:#ff8f6b;color:#ff8f6b}
+.btn.big{width:100%;padding:14px;font-size:16px;border-radius:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* chat overlay */
+#chat{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column}
+#chat.open{display:flex}
+.chead{border-bottom:1px solid var(--line);background:var(--panel)}
+.chead .wrap{display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:10px}
+.chead .back{background:none;border:0;font-size:24px;padding:4px 8px;color:var(--muted)}
+.chead .nm{font-weight:800;line-height:1.3}
+.chead small{color:var(--muted)}
+.homebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px dashed var(--line);font-size:13px}
+.homebar .h{flex:1;min-width:180px;color:var(--muted)}
+.homebar .h b{color:var(--text)}
+.msgs{flex:1;overflow-y:auto;padding:16px 0}
+.msg{max-width:82%;padding:10px 14px;border-radius:16px;margin:6px 0;line-height:1.8;white-space:pre-wrap;animation:pop .2s ease}
+.msg.a{background:var(--panel2);border-start-start-radius:4px}
+.msg.u{background:var(--gold);color:#1b140a;margin-inline-start:auto;border-start-end-radius:4px}
+.msg.typing{color:var(--muted)}
+.invite{border:1px solid var(--gold);background:#2a2013;border-radius:16px;padding:12px 14px;margin:6px 0;max-width:90%}
+.invite b{color:var(--gold2)}
+.invite .acts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0;scrollbar-width:none}
+.chips button{flex:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;white-space:nowrap}
+.chips button:hover{border-color:var(--gold)}
+.composer{border-top:1px solid var(--line);background:var(--panel);padding-bottom:env(safe-area-inset-bottom)}
+.composer form{display:flex;gap:8px;padding:8px 0 12px}
+.composer input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none}
+.composer input:focus{border-color:var(--gold)}
+
+/* trip */
+.loved{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 12px;font-size:13px}
+[dir=rtl] .tag{padding:6px 12px 6px 6px}
+.tag button{background:none;border:0;color:var(--muted);font-size:16px;line-height:1;padding:0 4px}
+.empty{color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:14px;line-height:1.7}
+.ctrls{display:flex;gap:10px;margin:14px 0}
+.ctrls label{flex:1;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.ctrls select{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
+.day{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-top:10px}
+.day h4{margin:0 0 8px;font-size:16px;color:var(--gold2)}
+.stop{border-inline-start:3px solid var(--gold);padding-inline-start:10px;margin:8px 0}
+.stop b{display:block}
+.stop small{color:var(--muted);line-height:1.7;display:block}
+.tip{font-size:13px;color:var(--muted);margin-top:8px}
+.warn{background:#3a2216;border:1px solid var(--danger);color:#ffc8b6;border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px}
+.passport{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:10px}
+.stamp{aspect-ratio:1;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;text-align:center;padding:10px;font-size:12px;color:var(--muted)}
+.stamp.got{border:3px double var(--gold);color:var(--gold2);background:radial-gradient(circle,#3a2b17,transparent 70%);transform:rotate(-8deg)}
+.stamp b{display:block;font-size:13px}
+
+nav.tabs{position:fixed;bottom:0;inset-inline:0;z-index:30;background:rgba(29,25,21,.97);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs .wrap{display:flex;height:var(--nav)}
+nav.tabs button{flex:1;background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button.on{color:var(--gold)}
+nav.tabs .badge{background:#ff8f6b;color:#1b140a;border-radius:999px;font-size:10px;padding:0 6px;font-weight:800;margin-inline-start:4px}
+.view{display:none;padding-bottom:30px}
+.view.on{display:block}
+footer.f{color:var(--muted);font-size:12px;line-height:1.9;padding:24px 0 10px;border-top:1px solid var(--line);margin-top:30px}
+footer.f a{color:var(--muted)}
+footer.f button{background:none;border:0;color:var(--gold);text-decoration:underline;padding:0;font-size:12px}
+@media(max-width:430px){.logo span{display:none}}
+#toast{position:fixed;bottom:calc(var(--nav) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#1b140a;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="logo"><b data-t="brand">بيتي</b><span data-t="tag">القطعة بتحكي… وبتعزمك</span></div>
+  <div class="lang" role="group" aria-label="Language">
+    <button data-lang="ar">عربي</button><button data-lang="en">EN</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <!-- 1. Talk to a piece -->
+  <section class="view on" id="v-talk">
+    <div class="hero">
+      <h1 data-t="h1">اقف قدام أي قطعة… <em data-t="h1em">واسألها</em> جت منين.</h1>
+      <p data-t="lead">كل قطعة في المتحف بتحكيلك حكايتها بنفسها، وفي الآخر بتقولك: تعالى زورني في بيتي. القطع اللي تحبها بتتحول لرحلة لأماكنها الحقيقية في مصر.</p>
+      <div class="status"><i class="dot" id="dot"></i><span id="status">…</span></div>
+    </div>
+    <div class="search"><input id="q" inputmode="search" autocomplete="off"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- 2. Map -->
+  <section class="view" id="v-map">
+    <h2 class="sec" data-t="mapH">بيوت القطع على الخريطة</h2>
+    <p class="sub" data-t="mapSub">كل نقطة مكان اتلقت فيه قطعة. الرقم = عدد القطع اللي جت منه.</p>
+    <div class="mapbox"><svg id="map" viewBox="0 0 655 642" role="img"></svg>
+      <div class="legend"><span><i style="background:var(--gold)"></i><span data-t="lgSite">موقع اكتشاف</span></span><span><i style="background:#ff8f6b"></i><span data-t="lgLoved">فيه قطعة حبيتها</span></span><span><i style="background:var(--text)"></i><span data-t="lgGem">المتحف</span></span></div>
+    </div>
+    <div id="site"></div>
+  </section>
+
+  <!-- 3. Trip -->
+  <section class="view" id="v-trip">
+    <h2 class="sec" data-t="tripH">رحلتك من المتحف لبيوت القطع</h2>
+    <p class="sub" data-t="tripSub">القطع اللي قلتلها «عايز أزورك» هنا. اختار الأيام والإيقاع، وبيتي يرتّبلك الرحلة.</p>
+    <div id="loved" class="loved"></div>
+    <div class="ctrls">
+      <label><span data-t="days">أيام</span><select id="days"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>7</option></select></label>
+      <label><span data-t="pace">الإيقاع</span><select id="pace"><option value="calm" data-t="calm">هادي</option><option value="full" data-t="full">مليان</option></select></label>
+    </div>
+    <button class="btn gold big" id="mk" data-t="make">اعمل رحلتي</button>
+    <div id="plan"></div>
+
+    <h2 class="sec" data-t="passH">جواز سفر الأصول</h2>
+    <p class="sub" data-t="passSub">لما توصل لبيت قطعة فعلاً، افتح الموقع على الخريطة ودوس «أنا هنا» عشان تاخد الختم.</p>
+    <div class="passport" id="passport"></div>
+  </section>
+
+  <footer class="f">
+    <div data-t="foot">بيتي · مشروع لهاكاثون المتحف المصري الكبير 2026 · بيانات تجريبية: 10 قطع من 5 مواقع، والمتحف يقدر يوصّله بقاعدة بياناته الكاملة.</div>
+    <div><span data-t="note">المسافات بخط مستقيم وتقريبية، ومواعيد الزيارة لازم تتأكد منها قبل السفر.</span>
+      · <button id="demo"></button></div>
+  </footer>
+</main>
+
+<!-- chat overlay -->
+<div id="chat" aria-modal="true" role="dialog">
+  <div class="chead"><div class="wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="back" id="back" aria-label="back">→</button>
+      <div class="av" id="cav"></div>
+      <div><div class="nm" id="cnm"></div><small id="chl"></small></div>
+    </div>
+  </div>
+  <div class="wrap"><div class="homebar" id="homebar"></div></div></div>
+  <div class="msgs"><div class="wrap" id="msgs"></div></div>
+  <div class="composer"><div class="wrap">
+    <div class="chips" id="chips"></div>
+    <form id="cf"><input id="ci" autocomplete="off" maxlength="300"><button class="btn gold" data-t="send">ابعت</button></form>
+  </div></div>
+</div>
+
+<nav class="tabs"><div class="wrap">
+  <button data-v="talk" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg><span data-t="tTalk">كلّم قطعة</span></button>
+  <button data-v="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14"/></svg><span data-t="tMap">الخريطة</span></button>
+  <button data-v="trip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg><span><span data-t="tTrip">رحلتي</span><span class="badge" id="badge" hidden></span></span></button>
+</div></nav>
+<div id="toast" role="status"></div>
+
+<script>
+/* ================= i18n ================= */
+const I18N = {
+  ar:{brand:"بيتي",tag:"القطعة بتحكي… وبتعزمك",h1:"اقف قدام أي قطعة… ",h1em:"واسألها",h1end:" جت منين.",
+    lead:"كل قطعة في المتحف بتحكيلك حكايتها بنفسها، وفي الآخر بتقولك: تعالى زورني في بيتي. القطع اللي تحبها بتتحول لرحلة لأماكنها الحقيقية في مصر.",
+    q:"اكتب رقم القطعة اللي على اللوحة (زي 201) أو اسمها",mapH:"بيوت القطع على الخريطة",mapSub:"كل نقطة مكان اتلقت فيه قطعة. الرقم = عدد القطع اللي جت منه.",
+    lgSite:"موقع اكتشاف",lgLoved:"فيه قطعة حبيتها",lgGem:"المتحف",tripH:"رحلتك من المتحف لبيوت القطع",
+    tripSub:"القطع اللي قلتلها «عايز أزورك» هنا. اختار الأيام والإيقاع، وبيتي يرتّبلك الرحلة.",days:"أيام",pace:"الإيقاع",calm:"هادي",full:"مليان",make:"اعمل رحلتي",
+    passH:"جواز سفر الأصول",passSub:"لما توصل لبيت قطعة فعلاً، افتح الموقع على الخريطة ودوس «أنا هنا» عشان تاخد الختم.",
+    foot:"بيتي · مشروع لهاكاثون المتحف المصري الكبير 2026 · بيانات تجريبية: 10 قطع من 5 مواقع، والمتحف يقدر يوصّله بقاعدة بياناته الكاملة.",
+    note:"المسافات بخط مستقيم وتقريبية، ومواعيد الزيارة لازم تتأكد منها قبل السفر.",send:"ابعت",tTalk:"كلّم قطعة",tMap:"الخريطة",tTrip:"رحلتي",
+    ci:"اسأل القطعة أي حاجة…",aiOn:p=>`متصل بالذكاء الاصطناعي (${p})`,aiOff:"وضع أوفلاين: القطع بترد من معلومات جاهزة",
+    km:"كم من المتحف",pcs:"قطع من هنا",region:"المنطقة",how:"توصل إزاي:",inMuseum:"في المتحف:",talk:"كلّمها",
+    want:"♡ عايز أزورك",wanted:"♥ في رحلتك",myHome:"بيتي:",seeMap:"شوفه على الخريطة",
+    chips:[["intro","انت مين؟"],["home","بيتك فين؟"],["found","مين لقاك؟"],["journey","وصلت للمتحف إزاي؟"],["made","معمول من إيه؟"],["visit","أزورك إزاي؟"]],
+    invite:(s,km)=>`<b>تعالى زورني في بيتي!</b><br>${s} · حوالي ${km} كم من المتحف.`,
+    dontKnow:"دي ما أعرفهاش بصراحة، اسأل حد من فريق المتحف. بس أقدر أحكيلك: أنا مين، بيتي فين، مين لقاني، وصلت هنا إزاي، ومعمول من إيه.",
+    visitAns:(s,how)=>`بيتي في ${s}. ${how} دوس «عايز أزورك» وأنا أدخل في رحلتك.`,
+    noLoved:"لسه ما قلتش لأي قطعة «عايز أزورك». كلّم قطعة أو افتح الخريطة وابدأ.",
+    stampHere:"أنا هنا · خد الختم",stamped:"✓ خدت الختم",simulate:"محاكاة الوصول (للعرض)",far:d=>`إنت على بعد ${d} كم من المكان. لازم تكون أقرب من 3 كم.`,
+    gotStamp:s=>`مبروك! خدت ختم ${s}`,noGeo:"مش قادر أعرف مكانك. اتأكد إنك سمحت بالموقع.",
+    demoOn:"وضع العرض: شغال",demoOff:"وضع العرض: مقفول",
+    travel:"سفر",museumDay:"يوم المتحف",museumNote:"شوف القطع اللي حبيتها في المتحف الأول، وبعدين روح لبيوتها.",
+    short:"الأيام مش كفاية لكل الأماكن، فحطيت أقربها. زوّد الأيام أو خلّي الإيقاع مليان.",
+    planBy:{ai:"الرحلة دي معمولة بالذكاء الاصطناعي",offline:"الرحلة دي معمولة أوفلاين بترتيب المسافة"},
+    dayN:n=>`اليوم ${n}`,openMaps:"افتح المسار في خرائط جوجل",working:"بجهّز رحلتك…",typing:"بتكتب…",
+    added:n=>`اتضافت لرحلتك: ${n}`,removed:n=>`اتشالت من رحلتك: ${n}`,
+    stampOf:(a,b)=>`${a} من ${b} ختم`,flyTip:"احجز الطيارة أو القطر بدري، وابدأ وادي الملوك الصبح بدري قبل الحر.",
+    luxorTravel:"سافر للأقصر النهارده واستريح، علشان تبدأ بكرة بدري.",unknown:"مش لاقي قطعة بالرقم أو الاسم ده."},
+  en:{brand:"Beity",tag:"The piece talks… and invites you home",h1:"Stand before any piece… ",h1em:"and ask it",h1end:" where it came from.",
+    lead:"Every piece in the museum tells you its own story, then says: come visit me at home. The pieces you love become a trip to their real places across Egypt.",
+    q:"Type the number on the label (e.g. 201) or a name",mapH:"Where the pieces come from",mapSub:"Each dot is a place where a piece was found. The number is how many pieces came from it.",
+    lgSite:"Discovery site",lgLoved:"Has a piece you love",lgGem:"The museum",tripH:"Your trip from the museum to their homes",
+    tripSub:"Pieces you told “I want to visit you” are here. Pick days and pace, and Beity plans the trip.",days:"Days",pace:"Pace",calm:"Calm",full:"Packed",make:"Plan my trip",
+    passH:"Origins passport",passSub:"When you actually reach a piece's home, open it on the map and tap “I'm here” to collect the stamp.",
+    foot:"Beity · a GEM Hackathon 2026 project · Demo data: 10 pieces from 5 sites; the museum can connect its full database.",
+    note:"Distances are straight-line estimates; confirm opening hours before you travel.",send:"Send",tTalk:"Talk",tMap:"Map",tTrip:"My trip",
+    ci:"Ask the piece anything…",aiOn:p=>`AI connected (${p})`,aiOff:"Offline mode: pieces answer from prepared facts",
+    km:"km from museum",pcs:"pieces from here",region:"Region",how:"Getting there:",inMuseum:"In the museum:",talk:"Talk to it",
+    want:"♡ I want to visit",wanted:"♥ In your trip",myHome:"My home:",seeMap:"See it on the map",
+    chips:[["intro","Who are you?"],["home","Where's your home?"],["found","Who found you?"],["journey","How did you get here?"],["made","What are you made of?"],["visit","How do I visit you?"]],
+    invite:(s,km)=>`<b>Come visit me at home!</b><br>${s} · about ${km} km from the museum.`,
+    dontKnow:"I honestly don't know that one; a museum guide can help. But I can tell you who I am, where my home is, who found me, how I got here, and what I'm made of.",
+    visitAns:(s,how)=>`My home is ${s}. ${how} Tap “I want to visit” and I'll join your trip.`,
+    noLoved:"You haven't told any piece “I want to visit you” yet. Talk to a piece or open the map to start.",
+    stampHere:"I'm here · get the stamp",stamped:"✓ Stamp collected",simulate:"Simulate arrival (demo)",far:d=>`You're ${d} km away. You need to be within 3 km.`,
+    gotStamp:s=>`Congrats! You collected the ${s} stamp`,noGeo:"Couldn't get your location. Check location permission.",
+    demoOn:"Demo mode: on",demoOff:"Demo mode: off",
+    travel:"Travel",museumDay:"Museum day",museumNote:"See your favourite pieces at the museum first, then head to their homes.",
+    short:"Not enough days for every place, so I kept the nearest ones. Add days or switch to a packed pace.",
+    planBy:{ai:"Planned with AI",offline:"Planned offline by distance"},
+    dayN:n=>`Day ${n}`,openMaps:"Open route in Google Maps",working:"Planning your trip…",typing:"typing…",
+    added:n=>`Added to your trip: ${n}`,removed:n=>`Removed from your trip: ${n}`,
+    stampOf:(a,b)=>`${a} of ${b} stamps`,flyTip:"Book the flight or train early, and start the Valley of the Kings early before the heat.",
+    luxorTravel:"Travel to Luxor today and rest, so you can start early tomorrow.",unknown:"No piece with that number or name."}
+};
+
+/* ================= state ================= */
+const store={get(k,d){try{const v=localStorage.getItem("beity:"+k);return v==null?d:JSON.parse(v)}catch{return d}},
+             set(k,v){try{localStorage.setItem("beity:"+k,JSON.stringify(v))}catch{}}};
+let LANG=store.get("lang","ar"), LOVED=new Set(store.get("loved",[])), STAMPS=new Set(store.get("stamps",[]));
+let DEMO=store.get("demo",false), MODE="offline", PROVIDER="", DATA=null, SEL=null, CUR=null;
+const CHATS={};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const T=k=>I18N[LANG][k];
+const L=o=>o?.[LANG]??o?.ar??"";
+const site=id=>DATA.sites.find(s=>s.id===id), piece=id=>DATA.pieces.find(p=>p.id===id);
+function km(a,b){const R=6371,r=x=>x*Math.PI/180,dLa=r(b.lat-a.lat),dLo=r(b.lon-a.lon);
+  const h=Math.sin(dLa/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)))}
+const num=n=>LANG==="ar"?Number(n).toLocaleString("ar-EG"):String(n);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),2600)}
+const initial=p=>L(p.name).replace(/^(ال)/,"").trim()[0]||"?";
+
+/* ================= render: language & static text ================= */
+function applyLang(){
+  document.documentElement.lang=LANG; document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  $$("[data-t]").forEach(el=>{const v=I18N[LANG][el.dataset.t];if(typeof v==="string")el.textContent=v});
+  $(".hero h1").innerHTML=`${esc(T("h1"))}<em>${esc(T("h1em"))}</em>${esc(T("h1end"))}`;
+  $("#q").placeholder=T("q"); $("#ci").placeholder=T("ci");
+  $$(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===LANG));
+  $("#back").textContent=LANG==="ar"?"→":"←";
+  document.title=LANG==="ar"?"بيتي · Beity":"Beity · بيتي";
+  renderAll();
+}
+function renderStatus(){$("#dot").classList.toggle("ok",MODE==="ai");$("#status").textContent=MODE==="ai"?T("aiOn")(PROVIDER):T("aiOff");
+  $("#demo").textContent=DEMO?T("demoOn"):T("demoOff")}
+
+/* ================= pieces grid ================= */
+function renderGrid(){
+  const q=$("#q").value.trim().toLowerCase();
+  const list=DATA.pieces.filter(p=>!q||p.code.includes(q)||p.name.ar.includes(q)||p.name.en.toLowerCase().includes(q));
+  $("#grid").innerHTML=list.map(p=>`<button class="pc" data-open="${p.id}">
+    <div style="display:flex;gap:10px;align-items:center"><div class="av">${esc(initial(p))}</div><div class="code">#${p.code}</div></div>
+    <div class="nm">${esc(L(p.name))}</div><div class="hl">${esc(L(p.hall))}</div>
+    <div class="row"><span>${esc(L(site(p.site).name))}</span>${LOVED.has(p.id)?'<span class="heart">♥</span>':""}</div></button>`).join("")
+    || `<div class="empty">${esc(T("unknown"))}</div>`;
+}
+
+/* ================= map ================= */
+const K=60, X=lon=>(lon-24.6)*0.88*K, Y=lat=>(32.4-lat)*K;
+const OUTLINE=[[25,31.6],[26.6,31.5],[27.3,31.35],[28.4,31.05],[29,30.85],[29.9,31.2],[30.4,31.45],[31,31.55],[31.6,31.45],[32.3,31.25],[33.2,31.1],[34.22,31.32],[34.9,29.5],[34.6,28.6],[34.27,27.75],[33.6,28.4],[32.9,29.4],[32.56,29.97],[32.35,29.6],[32.65,29.1],[33.1,28.35],[33.8,27.25],[34.28,26.1],[34.9,25.07],[35.47,23.95],[35.7,23.1],[36.6,22.2],[36.9,22],[25,22]];
+const NILE=[[[31.3,22],[31.6,22.4],[32.3,23],[32.9,24.09],[32.9,24.6],[32.64,25.69],[32.73,26.16],[32,26.5],[31.6,26.9],[31.18,27.18],[30.75,28.1],[30.95,28.6],[31.1,29.07],[31.23,30.05]],
+            [[31.23,30.05],[30.95,30.6],[30.6,31],[30.4,31.45]],[[31.23,30.05],[31.3,30.6],[31.6,31.1],[31.8,31.5]]];
+const OFFSET={giza:[-26,-10],memphis:[-12,26],tanis:[0,0],kv:[-20,-6],hettan:[20,8]};
+const pathOf=pts=>pts.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join("");
+function renderMap(){
+  const g=DATA.gem, svg=$("#map");
+  const lovedSites=new Set([...LOVED].map(id=>piece(id)?.site));
+  const labels=LANG==="ar"?{med:"البحر المتوسط",red:"البحر الأحمر",cai:"القاهرة",alx:"الإسكندرية",asw:"أسوان",lux:"الأقصر",gem:"المتحف"}:{med:"Mediterranean Sea",red:"Red Sea",cai:"Cairo",alx:"Alexandria",asw:"Aswan",lux:"Luxor",gem:"GEM"};
+  let h=`<rect width="655" height="642" fill="#10151c"/>
+  <path d="${pathOf(OUTLINE)}Z" fill="#2a241d" stroke="#4a3f33" stroke-width="1.5"/>
+  ${NILE.map(n=>`<path d="${pathOf(n)}" fill="none" stroke="var(--nile)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`).join("")}
+  <text x="${X(27.2)}" y="${Y(31.95)}" fill="#5f87b8" font-size="16">${labels.med}</text>
+  <text x="${X(35.2)}" y="${Y(25.6)}" fill="#5f87b8" font-size="16" transform="rotate(58 ${X(35.2)} ${Y(25.6)})">${labels.red}</text>
+  ${[[31.4,30.15,labels.cai],[29.9,31.0,labels.alx],[33.1,24.0,labels.asw]].map(([lo,la,t])=>`<text x="${X(lo)}" y="${Y(la)}" fill="#8d7f6b" font-size="14">${t}</text>`).join("")}`;
+  DATA.sites.forEach(s=>{h+=`<line x1="${X(g.lon)}" y1="${Y(g.lat)}" x2="${X(s.lon)+OFFSET[s.id][0]}" y2="${Y(s.lat)+OFFSET[s.id][1]}" stroke="${lovedSites.has(s.id)?"#ff8f6b":"#e3aa4f"}" stroke-width="1.3" stroke-dasharray="4 4" opacity=".7"/>`});
+  h+=`<g style="pointer-events:none"><rect x="${X(g.lon)-6}" y="${Y(g.lat)-6}" width="12" height="12" fill="var(--text)" transform="rotate(45 ${X(g.lon)} ${Y(g.lat)})"/><text x="${X(g.lon)+12}" y="${Y(g.lat)+4}" fill="var(--text)" font-size="15" font-weight="800">${labels.gem}</text></g>`;
+  DATA.sites.forEach(s=>{const n=DATA.pieces.filter(p=>p.site===s.id).length, x=X(s.lon)+OFFSET[s.id][0], y=Y(s.lat)+OFFSET[s.id][1];
+    const anchorEnd=OFFSET[s.id][0]<0;
+    h+=`<g class="pin ${lovedSites.has(s.id)?"loved":""} ${SEL===s.id?"sel":""}" data-site="${s.id}" tabindex="0" role="button" aria-label="${esc(L(s.name))}: ${n}">
+      <circle class="halo" cx="${x}" cy="${y}" r="21"/><circle class="c" cx="${x}" cy="${y}" r="15"/>
+      <text x="${x}" y="${y+5}" text-anchor="middle">${num(n)}</text>
+      <text class="lbl" x="${x+(anchorEnd?-22:22)}" y="${y+6}" text-anchor="${anchorEnd?"end":"start"}">${esc(L(s.name).split(" (")[0])}</text></g>`});
+  svg.innerHTML=h;
+}
+function renderSite(){
+  const box=$("#site"); if(!SEL){box.innerHTML="";return}
+  const s=site(SEL), here=DATA.pieces.filter(p=>p.site===s.id), d=km(DATA.gem,s), got=STAMPS.has(s.id);
+  box.innerHTML=`<article class="card">
+    <div class="meta">${s.lat.toFixed(3)}°N · ${s.lon.toFixed(3)}°E · ${esc(L(s.gov))}</div>
+    <h3>${esc(L(s.name))}</h3><p>${esc(L(s.story))}</p>
+    <div class="stats"><div><b>${num(d)}</b><span>${T("km")}</span></div><div><b>${num(here.length)}</b><span>${T("pcs")}</span></div><div><b>${esc(L(DATA.regions[s.region]))}</b><span>${T("region")}</span></div></div>
+    <div class="plist">${here.map(p=>`<div class="pitem"><div class="av" style="width:34px;height:34px">${esc(initial(p))}</div>
+      <div class="t"><div>${esc(L(p.name))}</div><small>${T("inMuseum")} ${esc(L(p.hall))}</small></div>
+      <button class="btn" data-open="${p.id}">${T("talk")}</button>
+      <button class="btn ${LOVED.has(p.id)?"on":""}" data-love="${p.id}" aria-label="love">${LOVED.has(p.id)?"♥":"♡"}</button></div>`).join("")}</div>
+    <p><b>${T("how")}</b> ${esc(L(s.how))}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ${got?"":"gold"}" data-stamp="${s.id}" ${got?"disabled":""}>${got?T("stamped"):T("stampHere")}</button>
+      ${DEMO&&!got?`<button class="btn" data-sim="${s.id}">${T("simulate")}</button>`:""}
+    </div></article>`;
+}
+function selectSite(id,scroll){SEL=id;renderMap();renderSite();if(scroll)$("#site").scrollIntoView({behavior:"smooth",block:"start"})}
+
+/* ================= love / stamps ================= */
+function toggleLove(id){const p=piece(id);if(LOVED.has(id)){LOVED.delete(id);toast(T("removed")(L(p.name)))}else{LOVED.add(id);toast(T("added")(L(p.name)))}
+  store.set("loved",[...LOVED]);renderAll();if(CUR===id)renderHomebar()}
+function giveStamp(id){STAMPS.add(id);store.set("stamps",[...STAMPS]);toast(T("gotStamp")(L(site(id).name)));renderAll()}
+function checkIn(id){
+  if(!navigator.geolocation){toast(T("noGeo"));return}
+  navigator.geolocation.getCurrentPosition(pos=>{const d=km({lat:pos.coords.latitude,lon:pos.coords.longitude},site(id));
+    if(d<=3)giveStamp(id);else toast(T("far")(num(d)))},()=>toast(T("noGeo")),{enableHighAccuracy:true,timeout:10000});
+}
+function renderPassport(){
+  const n=DATA.sites.filter(s=>STAMPS.has(s.id)).length;
+  $("#passport").innerHTML=DATA.sites.map(s=>`<div class="stamp ${STAMPS.has(s.id)?"got":""}"><div><b>${esc(L(s.name).split(" (")[0])}</b>${STAMPS.has(s.id)?"✓":esc(L(s.gov).split(" ·")[0])}</div></div>`).join("")
+    +`<div class="stamp" style="border-style:solid"><div><b style="font-size:20px;color:var(--gold)">${num(n)}/${num(DATA.sites.length)}</b>${T("stampOf")(num(n),num(DATA.sites.length))}</div></div>`;
+}
+
+/* ================= chat ================= */
+function openChat(id){
+  const p=piece(id); if(!p)return; CUR=id;
+  $("#cav").textContent=initial(p); $("#cnm").textContent=L(p.name); $("#chl").textContent=`#${p.code} · ${L(p.hall)}`;
+  renderHomebar();
+  if(!CHATS[id]){CHATS[id]=[{role:"assistant",text:L(p.facts.intro)}]}
+  renderMsgs(); renderChips();
+  $("#chat").classList.add("open"); document.body.style.overflow="hidden";
+  try{history.replaceState(null,"","#piece="+id)}catch{}
+}
+function closeChat(){CUR=null;$("#chat").classList.remove("open");document.body.style.overflow="";try{history.replaceState(null,"",location.pathname)}catch{}}
+function renderHomebar(){
+  const p=piece(CUR), s=site(p.site), on=LOVED.has(p.id);
+  $("#homebar").innerHTML=`<div class="h">⌂ ${T("myHome")} <b>${esc(L(s.name))}</b> · ${num(km(DATA.gem,s))} ${LANG==="ar"?"كم":"km"}</div>
+    <button class="btn" data-gomap="${s.id}">${T("seeMap")}</button>
+    <button class="btn ${on?"on":"gold"}" data-love="${p.id}">${on?T("wanted"):T("want")}</button>`;
+}
+function renderMsgs(){
+  const p=piece(CUR), s=site(p.site);
+  $("#msgs").innerHTML=CHATS[CUR].map(m=>m.invite
+    ?`<div class="invite">${T("invite")(esc(L(s.name)),num(km(DATA.gem,s)))}<div class="acts"><button class="btn gold" data-love="${p.id}">${LOVED.has(p.id)?T("wanted"):T("want")}</button><button class="btn" data-gomap="${s.id}">${T("seeMap")}</button></div></div>`
+    :`<div class="msg ${m.role==="user"?"u":"a"} ${m.typing?"typing":""}">${esc(m.text)}</div>`).join("");
+  const box=$(".msgs"); box.scrollTop=box.scrollHeight;
+}
+function renderChips(){$("#chips").innerHTML=T("chips").map(([k,t])=>`<button data-ask="${k}">${esc(t)}</button>`).join("")}
+
+const INTENTS=[["visit",/(أزور|ازور|زيار|اروح|أروح|visit|go there|trip)/i],["found",/(لقا|لقي|اكتشف|اتلقي|found|discover)/i],
+  ["journey",/(وصلت|اتنقل|نقل|جيت المتحف|جيت هنا|get here|moved|journey|museum)/i],["made",/(معمول|مصنوع|خام|دهب|ذهب|وزن|طول|made|material|weigh|tall|gold)/i],
+  ["home",/(بيت|منين|فين|اصل|أصل|home|from|where)/i],["intro",/(مين|انت|إنت|عرف|who|about you|hello|hi\b|ازيك|أهلا|اهلا)/i]];
+function offlineReply(id,text,intent){
+  const p=piece(id), s=site(p.site);
+  intent=intent||(INTENTS.find(([,re])=>re.test(text))||[])[0];
+  if(intent==="visit")return{text:T("visitAns")(L(s.name),L(s.how)),invite:true};
+  if(intent)return{text:L(p.facts[intent]),invite:intent==="home"};
+  return{text:T("dontKnow"),invite:false};
+}
+async function ask(text,intent){
+  const id=CUR; if(!text.trim())return;
+  CHATS[id].push({role:"user",text}); CHATS[id].push({role:"assistant",text:T("typing"),typing:true}); renderMsgs();
+  let out=null;
+  if(MODE==="ai"){
+    try{const msgs=CHATS[id].filter(m=>!m.typing&&!m.invite).map(m=>({role:m.role,text:m.text}));
+      const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({piece:id,messages:msgs,language:LANG})});
+      if(r.ok){const j=await r.json();const it=intent||(INTENTS.find(([,re])=>re.test(text))||[])[0];out={text:j.reply,invite:it==="home"||it==="visit"}}
+    }catch{}
+  }
+  if(!out){await new Promise(r=>setTimeout(r,450));out=offlineReply(id,text,intent)}
+  CHATS[id]=CHATS[id].filter(m=>!m.typing);
+  CHATS[id].push({role:"assistant",text:out.text});
+  if(out.invite&&!CHATS[id].some(m=>m.invite))CHATS[id].push({invite:true});
+  if(CUR===id)renderMsgs();
+}
+
+/* ================= trip planning ================= */
+function renderLoved(){
+  const l=[...LOVED].map(piece).filter(Boolean);
+  $("#loved").innerHTML=l.length?l.map(p=>`<span class="tag">${esc(L(p.name))}<button data-love="${p.id}" aria-label="remove">×</button></span>`).join(""):`<div class="empty">${esc(T("noLoved"))}</div>`;
+  $("#mk").disabled=!l.length;
+  const b=$("#badge"); b.hidden=!l.length; b.textContent=num(l.length);
+}
+function offlinePlan(days,pace){
+  const loved=[...LOVED].map(piece).filter(Boolean);
+  const ids=[...new Set(loved.map(p=>p.site))];
+  const byRegion={}; ids.forEach(id=>{const s=site(id);(byRegion[s.region]??=[]).push(s)});
+  const regions=Object.keys(byRegion).sort((a,b)=>Math.min(...byRegion[a].map(s=>km(DATA.gem,s)))-Math.min(...byRegion[b].map(s=>km(DATA.gem,s))));
+  const cap=pace==="full"?1.5:1, out=[];
+  for(const r of regions){
+    const list=byRegion[r].sort((a,b)=>km(DATA.gem,a)-km(DATA.gem,b));
+    if(r==="luxor"&&days-out.length>=2)out.push({title:`${T("travel")}: ${L(DATA.regions.luxor)}`,stops:[],tip:T("luxorTravel")});
+    let cur=null,load=0;
+    for(const s of list){if(!cur||load+s.visit>cap){cur={title:L(DATA.regions[r]),stops:[],tip:r==="luxor"?T("flyTip"):""};out.push(cur);load=0}
+      cur.stops.push({site:s.id,note:L(s.how)});load+=s.visit}
+  }
+  let warning="";
+  if(out.length>days){warning=T("short");out.length=days}
+  else if(out.length<days)out.unshift({title:T("museumDay"),stops:[],tip:T("museumNote")});
+  return{title:"",days:out,warning};
+}
+function mapsLink(stops){const pts=stops.map(st=>site(st.site)).filter(Boolean);if(!pts.length)return"";
+  const c=s=>`${s.lat},${s.lon}`, dest=pts[pts.length-1], way=pts.slice(0,-1).map(c).join("|");
+  return`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(c(dest))}${way?"&waypoints="+encodeURIComponent(way):""}&travelmode=driving`}
+function showPlan(plan,source){
+  const loved=[...LOVED].map(piece).filter(Boolean);
+  $("#plan").innerHTML=`<p class="sub" style="margin-top:14px">${esc(T("planBy")[source])}${plan.title?" · "+esc(plan.title):""}</p>`
+   +(plan.warning?`<div class="warn">${esc(plan.warning)}</div>`:"")
+   +plan.days.map((d,i)=>`<div class="day"><h4>${T("dayN")(num(i+1))}${d.title?" · "+esc(d.title):""}</h4>
+     ${d.stops.map(st=>{const s=site(st.site);const ps=loved.filter(p=>p.site===st.site).map(p=>L(p.name)).join("، ");
+       return`<div class="stop"><b>${esc(L(s.name))}</b><small>${ps?"♥ "+esc(ps)+"<br>":""}${esc(st.note||"")}</small></div>`}).join("")}
+     ${d.tip?`<div class="tip">💡 ${esc(d.tip)}</div>`:""}
+     ${d.stops.length?`<a class="btn" style="display:inline-block;margin-top:10px;text-decoration:none" target="_blank" rel="noopener" href="${mapsLink(d.stops)}">${T("openMaps")}</a>`:""}</div>`).join("");
+}
+async function makePlan(){
+  const days=+$("#days").value, pace=$("#pace").value;
+  $("#mk").disabled=true; $("#mk").textContent=T("working");
+  let res=null;
+  if(MODE==="ai"){try{const r=await fetch("/api/plan",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pieces:[...LOVED],days,pace,language:LANG})});
+    if(r.ok){const j=await r.json();res={plan:j.plan,source:"ai"}}}catch{}}
+  if(!res)res={plan:offlinePlan(days,pace),source:"offline"};
+  showPlan(res.plan,res.source);
+  $("#mk").disabled=false; $("#mk").textContent=T("make");
+}
+
+/* ================= nav & events ================= */
+function go(v){$$(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));$$("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));window.scrollTo({top:0})}
+function renderAll(){renderStatus();renderGrid();renderMap();renderSite();renderLoved();renderPassport();if(CUR){renderHomebar();renderMsgs();renderChips()}}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-open],[data-love],[data-site],[data-stamp],[data-sim],[data-gomap],[data-ask],[data-v],[data-lang]");if(!t)return;
+  const d=t.dataset;
+  if(d.open)openChat(d.open);
+  else if(d.love)toggleLove(d.love);
+  else if(d.site)selectSite(d.site,true);
+  else if(d.stamp)checkIn(d.stamp);
+  else if(d.sim)giveStamp(d.sim);
+  else if(d.gomap){closeChat();go("map");selectSite(d.gomap,true)}
+  else if(d.ask){const c=T("chips").find(([k])=>k===d.ask);ask(c[1],d.ask)}
+  else if(d.v)go(d.v);
+  else if(d.lang){LANG=d.lang;store.set("lang",LANG);applyLang()}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CUR)closeChat();const p=e.target.closest?.(".pin");if(p&&(e.key==="Enter"||e.key===" ")){e.preventDefault();selectSite(p.dataset.site,true)}});
+$("#back").onclick=closeChat;
+$("#cf").onsubmit=e=>{e.preventDefault();const v=$("#ci").value;$("#ci").value="";ask(v)};
+$("#q").oninput=renderGrid;
+$("#q").onkeydown=e=>{if(e.key==="Enter"){const q=e.target.value.trim();const p=DATA.pieces.find(p=>p.code===q)||DATA.pieces.find(p=>p.name.ar.includes(q)||p.name.en.toLowerCase().includes(q.toLowerCase()));if(q&&p)openChat(p.id);else if(q)toast(T("unknown"))}};
+$("#mk").onclick=makePlan;
+$("#demo").onclick=()=>{DEMO=!DEMO;store.set("demo",DEMO);renderAll()};
+
+/* ================= boot ================= */
+(async()=>{
+  DATA=await (await fetch("data.json")).json();
+  if(/demo/.test(location.search)){DEMO=true;store.set("demo",true)}
+  applyLang();
+  try{const r=await fetch("/api/health");if(r.ok){const j=await r.json();PROVIDER=j.provider;if(j.provider&&j.provider!=="offline")MODE="ai"}}catch{}
+  renderStatus();
+  const m=location.hash.match(/piece=(\w+)/);if(m&&piece(m[1]))openChat(m[1]);   // QR next to each piece → /#piece=mask
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "بيتي · Beity",
+  "short_name": "بيتي",
+  "description": "القطعة بتحكيلك حكايتها في المتحف المصري الكبير، وبعدين بتعزمك تزور بيتها الأصلي.",
+  "start_url": "./",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "ar",
+  "background_color": "#14110e",
+  "theme_color": "#14110e",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
