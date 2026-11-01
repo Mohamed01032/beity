@@ -178,6 +178,7 @@ footer.f button{background:none;border:0;color:var(--gold);text-decoration:under
 [hidden]{display:none!important}
 #toast{position:fixed;bottom:calc(var(--nav) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#1b140a;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%)}
+.leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.85) saturate(.6)}
 </style>
 </head>
 <body>
@@ -368,8 +369,8 @@ function renderMap(){
   if(!LF){el.innerHTML=`<div class="empty" style="margin:16px">${esc(T("mapOff"))}</div>`;return}
   if(!MAP){
     MAP=LF.map(el,{scrollWheelZoom:false}).setView([27.2,31.2],6);
-    LF.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:18,
-      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
+    LF.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(MAP);
     MLAYER=LF.layerGroup().addTo(MAP);
     MAP.on("zoomend",()=>renderMap());
   }

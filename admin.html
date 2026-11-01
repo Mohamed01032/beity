@@ -72,6 +72,7 @@ legend{color:var(--gold2);padding:0 6px;font-size:14px}
 #toast.show{opacity:1}
 [hidden]{display:none!important}
 @media print{header,.tabs,.bar,.noprint{display:none!important}body{background:#fff}.qrgrid{grid-template-columns:repeat(3,1fr)}.qr{border:1px dashed #999}}
+.leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.85) saturate(.6)}
 </style>
 </head>
 <body>
@@ -253,7 +254,7 @@ function siteForm(s){
   if(window.L){
     const lat=$('#dBody input[name="lat"]'),lon=$('#dBody input[name="lon"]');
     PICK=L.map("pick").setView([s.lat,s.lon],isNew?6:12);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:18,attribution:"© OpenStreetMap © CARTO"}).addTo(PICK);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(PICK);
     const m=L.marker([s.lat,s.lon]).addTo(PICK);
     PICK.on("click",e=>{m.setLatLng(e.latlng);lat.value=e.latlng.lat.toFixed(4);lon.value=e.latlng.lng.toFixed(4)});
     [lat,lon].forEach(i=>i.oninput=()=>{const a=+lat.value,b=+lon.value;if(a&&b)m.setLatLng([a,b])});
