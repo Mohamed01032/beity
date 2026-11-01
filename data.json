@@ -2,180 +2,675 @@
   "gem": {
     "lat": 29.9946,
     "lon": 31.1196,
-    "name": { "ar": "المتحف المصري الكبير", "en": "Grand Egyptian Museum" }
+    "name": {
+      "ar": "المتحف المصري الكبير",
+      "en": "Grand Egyptian Museum"
+    }
   },
   "regions": {
-    "cairo": { "ar": "القاهرة والجيزة", "en": "Cairo & Giza" },
-    "delta": { "ar": "الدلتا", "en": "The Delta" },
-    "luxor": { "ar": "الأقصر", "en": "Luxor" }
+    "cairo": {
+      "ar": "القاهرة والجيزة",
+      "en": "Cairo & Giza"
+    },
+    "delta": {
+      "ar": "الدلتا",
+      "en": "The Delta"
+    },
+    "luxor": {
+      "ar": "الأقصر",
+      "en": "Luxor"
+    }
   },
   "sites": [
     {
-      "id": "giza", "lat": 29.9792, "lon": 31.1342, "region": "cairo", "visit": 0.5,
-      "name": { "ar": "هضبة الجيزة", "en": "Giza Plateau" },
-      "gov": { "ar": "الجيزة", "en": "Giza" },
-      "story": { "ar": "جنب الهرم الأكبر اتلقت مركب خوفو مدفونة في حفرة مقفولة سنة 1954، متفككة لأكتر من 1200 قطعة.", "en": "Beside the Great Pyramid, Khufu's boat was found in a sealed pit in 1954, taken apart into more than 1,200 pieces." },
-      "how": { "ar": "على بعد دقايق من المتحف. تمشي أو تركب عربية.", "en": "Minutes from the museum, on foot or by car." }
+      "id": "giza",
+      "lat": 29.9792,
+      "lon": 31.1342,
+      "region": "cairo",
+      "visit": 0.5,
+      "name": {
+        "ar": "هضبة الجيزة",
+        "en": "Giza Plateau"
+      },
+      "gov": {
+        "ar": "الجيزة",
+        "en": "Giza"
+      },
+      "story": {
+        "ar": "جنب الهرم الأكبر اتلقت مركب خوفو مدفونة في حفرة مقفولة سنة 1954، متفككة لأكتر من 1200 قطعة.",
+        "en": "Beside the Great Pyramid, Khufu's boat was found in a sealed pit in 1954, taken apart into more than 1,200 pieces."
+      },
+      "how": {
+        "ar": "على بعد دقايق من المتحف. تمشي أو تركب عربية.",
+        "en": "Minutes from the museum, on foot or by car."
+      }
     },
     {
-      "id": "memphis", "lat": 29.8494, "lon": 31.2519, "region": "cairo", "visit": 0.5,
-      "name": { "ar": "ميت رهينة (منف القديمة)", "en": "Mit Rahina (ancient Memphis)" },
-      "gov": { "ar": "الجيزة", "en": "Giza" },
-      "story": { "ar": "منف كانت عاصمة مصر في عصور كتير. هنا اتلقى تمثال رمسيس الثاني العملاق سنة 1820، مكسور لأجزاء.", "en": "Memphis was Egypt's capital for long stretches of history. The colossal statue of Ramesses II was found here in 1820, broken into parts." },
-      "how": { "ar": "حوالي ساعة بالعربية من المتحف، وتقدر تجمعها مع سقارة في نفس اليوم.", "en": "About an hour by car from the museum; easy to pair with Saqqara on the same day." }
+      "id": "memphis",
+      "lat": 29.8494,
+      "lon": 31.2519,
+      "region": "cairo",
+      "visit": 0.5,
+      "name": {
+        "ar": "ميت رهينة (منف القديمة)",
+        "en": "Mit Rahina (ancient Memphis)"
+      },
+      "gov": {
+        "ar": "الجيزة",
+        "en": "Giza"
+      },
+      "story": {
+        "ar": "منف كانت عاصمة مصر في عصور كتير. هنا اتلقى تمثال رمسيس الثاني العملاق سنة 1820، مكسور لأجزاء.",
+        "en": "Memphis was Egypt's capital for long stretches of history. The colossal statue of Ramesses II was found here in 1820, broken into parts."
+      },
+      "how": {
+        "ar": "حوالي ساعة بالعربية من المتحف، وتقدر تجمعها مع سقارة في نفس اليوم.",
+        "en": "About an hour by car from the museum; easy to pair with Saqqara on the same day."
+      }
     },
     {
-      "id": "tanis", "lat": 30.9772, "lon": 31.88, "region": "delta", "visit": 1,
-      "name": { "ar": "صان الحجر (تانيس)", "en": "San el-Hagar (Tanis)" },
-      "gov": { "ar": "الشرقية", "en": "Sharqia" },
-      "story": { "ar": "مدينة كبيرة في الدلتا، ومنها جت المسلة المعلّقة لرمسيس الثاني اللي بتستقبل الزوار قدام المتحف.", "en": "A great Delta city, and the home of the Hanging Obelisk of Ramesses II that greets visitors outside the museum." },
-      "how": { "ar": "حوالي 3 ساعات بالعربية من القاهرة. رحلة يوم كامل.", "en": "About 3 hours by car from Cairo. A full day trip." }
+      "id": "tanis",
+      "lat": 30.9772,
+      "lon": 31.88,
+      "region": "delta",
+      "visit": 1.0,
+      "name": {
+        "ar": "صان الحجر (تانيس)",
+        "en": "San el-Hagar (Tanis)"
+      },
+      "gov": {
+        "ar": "الشرقية",
+        "en": "Sharqia"
+      },
+      "story": {
+        "ar": "مدينة كبيرة في الدلتا، ومنها جت المسلة المعلّقة لرمسيس الثاني اللي بتستقبل الزوار قدام المتحف.",
+        "en": "A great Delta city, and the home of the Hanging Obelisk of Ramesses II that greets visitors outside the museum."
+      },
+      "how": {
+        "ar": "حوالي 3 ساعات بالعربية من القاهرة. رحلة يوم كامل.",
+        "en": "About 3 hours by car from Cairo. A full day trip."
+      }
     },
     {
-      "id": "kv", "lat": 25.7402, "lon": 32.6014, "region": "luxor", "visit": 1,
-      "name": { "ar": "وادي الملوك", "en": "Valley of the Kings" },
-      "gov": { "ar": "الأقصر · البر الغربي", "en": "Luxor · West Bank" },
-      "story": { "ar": "هنا مقبرة توت عنخ آمون (KV62) اللي اكتشفها هوارد كارتر سنة 1922. القناع والعرش والعربيات والأبواق كلهم طلعوا من المكان ده.", "en": "Home of Tutankhamun's tomb (KV62), found by Howard Carter in 1922. The mask, throne, chariots and trumpets all came from here." },
-      "how": { "ar": "طيارة حوالي ساعة من القاهرة للأقصر، أو قطر نوم بالليل.", "en": "About an hour's flight from Cairo to Luxor, or an overnight sleeper train." }
+      "id": "kv",
+      "lat": 25.7402,
+      "lon": 32.6014,
+      "region": "luxor",
+      "visit": 1.0,
+      "name": {
+        "ar": "وادي الملوك",
+        "en": "Valley of the Kings"
+      },
+      "gov": {
+        "ar": "الأقصر · البر الغربي",
+        "en": "Luxor · West Bank"
+      },
+      "story": {
+        "ar": "هنا مقبرة توت عنخ آمون (KV62) اللي اكتشفها هوارد كارتر سنة 1922. القناع والعرش والعربيات والأبواق كلهم طلعوا من المكان ده.",
+        "en": "Home of Tutankhamun's tomb (KV62), found by Howard Carter in 1922. The mask, throne, chariots and trumpets all came from here."
+      },
+      "how": {
+        "ar": "طيارة حوالي ساعة من القاهرة للأقصر، أو قطر نوم بالليل.",
+        "en": "About an hour's flight from Cairo to Luxor, or an overnight sleeper train."
+      }
     },
     {
-      "id": "hettan", "lat": 25.7205, "lon": 32.6102, "region": "luxor", "visit": 0.5,
-      "name": { "ar": "كوم الحيتان", "en": "Kom el-Hettan" },
-      "gov": { "ar": "الأقصر · البر الغربي", "en": "Luxor · West Bank" },
-      "story": { "ar": "بقايا المعبد الجنائزي لأمنحتب الثالث، جنب تمثالي ممنون. هنا اتلقى سنة 2009 تمثال ضخم للملك مع الإله رع حور آختي.", "en": "The remains of Amenhotep III's mortuary temple, beside the Colossi of Memnon. A large statue of the king with the god Ra-Horakhty was found here in 2009." },
-      "how": { "ar": "على بعد دقايق من وادي الملوك، فبتتزار معاه في نفس اليوم.", "en": "Minutes from the Valley of the Kings, so it fits in the same day." }
+      "id": "hettan",
+      "lat": 25.7205,
+      "lon": 32.6102,
+      "region": "luxor",
+      "visit": 0.5,
+      "name": {
+        "ar": "كوم الحيتان",
+        "en": "Kom el-Hettan"
+      },
+      "gov": {
+        "ar": "الأقصر · البر الغربي",
+        "en": "Luxor · West Bank"
+      },
+      "story": {
+        "ar": "بقايا المعبد الجنائزي لأمنحتب الثالث، جنب تمثالي ممنون. هنا اتلقى سنة 2009 تمثال ضخم للملك مع الإله رع حور آختي.",
+        "en": "The remains of Amenhotep III's mortuary temple, beside the Colossi of Memnon. A large statue of the king with the god Ra-Horakhty was found here in 2009."
+      },
+      "how": {
+        "ar": "على بعد دقايق من وادي الملوك، فبتتزار معاه في نفس اليوم.",
+        "en": "Minutes from the Valley of the Kings, so it fits in the same day."
+      }
     }
   ],
   "pieces": [
     {
-      "id": "boat", "code": "101", "site": "giza",
-      "name": { "ar": "مركب خوفو الأولى", "en": "Khufu's first boat" },
-      "hall": { "ar": "متحف مراكب خوفو", "en": "Khufu Boats Museum" },
-      "facts": {
-        "intro": { "ar": "أهلاً! أنا مركب الملك خوفو. عندي أكتر من 4500 سنة، ومعمولة من خشب الأرز.", "en": "Hello! I'm King Khufu's boat. I'm more than 4,500 years old and made of cedar wood." },
-        "home": { "ar": "بيتي جنب الهرم الأكبر في الجيزة. كنت مدفونة في حفرة مقفولة جنبه علشان أصاحب الملك في رحلته للعالم التاني.", "en": "My home is beside the Great Pyramid at Giza. I was buried in a sealed pit next to it to accompany the king on his journey to the afterlife." },
-        "found": { "ar": "كمال الملاخ لقاني سنة 1954. كنت متفككة لحوالي 1224 قطعة، والحاج أحمد يوسف قعد سنين طويلة يركّبني من تاني.", "en": "Kamal el-Mallakh found me in 1954. I was in about 1,224 pieces, and restorer Ahmed Youssef spent many years putting me back together." },
-        "journey": { "ar": "سنة 2021 اتنقلت للمتحف الكبير وأنا حتة واحدة، على عربية مخصوص، في رحلة خدت ساعات.", "en": "In 2021 I was moved to the Grand Egyptian Museum in one piece on a special vehicle, a journey that took hours." },
-        "made": { "ar": "أنا معمولة من خشب الأرز، وطولي أكتر من 40 متر، والقطع متربطة بحبال من غير مسامير تقريباً.", "en": "I'm built from cedar, more than 40 metres long, with planks tied together by rope and almost no nails." }
+      "id": "boat",
+      "code": "101",
+      "site": "giza",
+      "name": {
+        "ar": "مركب خوفو الأولى",
+        "en": "Khufu's first boat"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Khufu_ship"]
+      "hall": {
+        "ar": "متحف مراكب خوفو",
+        "en": "Khufu Boats Museum"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أهلاً! أنا مركب الملك خوفو. عندي أكتر من 4500 سنة، ومعمولة من خشب الأرز.",
+          "en": "Hello! I'm King Khufu's boat. I'm more than 4,500 years old and made of cedar wood."
+        },
+        "home": {
+          "ar": "بيتي جنب الهرم الأكبر في الجيزة. كنت مدفونة في حفرة مقفولة جنبه علشان أصاحب الملك في رحلته للعالم التاني.",
+          "en": "My home is beside the Great Pyramid at Giza. I was buried in a sealed pit next to it to accompany the king on his journey to the afterlife."
+        },
+        "found": {
+          "ar": "كمال الملاخ لقاني سنة 1954. كنت متفككة لحوالي 1224 قطعة، والحاج أحمد يوسف قعد سنين طويلة يركّبني من تاني.",
+          "en": "Kamal el-Mallakh found me in 1954. I was in about 1,224 pieces, and restorer Ahmed Youssef spent many years putting me back together."
+        },
+        "journey": {
+          "ar": "سنة 2021 اتنقلت للمتحف الكبير وأنا حتة واحدة، على عربية مخصوص، في رحلة خدت ساعات.",
+          "en": "In 2021 I was moved to the Grand Egyptian Museum in one piece on a special vehicle, a journey that took hours."
+        },
+        "made": {
+          "ar": "أنا معمولة من خشب الأرز، وطولي أكتر من 40 متر، والقطع متربطة بحبال من غير مسامير تقريباً.",
+          "en": "I'm built from cedar, more than 40 metres long, with planks tied together by rope and almost no nails."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Khufu_ship"
+      ]
     },
     {
-      "id": "ramesses", "code": "102", "site": "memphis",
-      "name": { "ar": "تمثال رمسيس الثاني العملاق", "en": "Colossal statue of Ramesses II" },
-      "hall": { "ar": "البهو العظيم", "en": "Grand Hall" },
-      "facts": {
-        "intro": { "ar": "أنا رمسيس التاني، أشهر ملوك مصر. طولي حوالي 11 متر، وأول حاجة بتشوفها لما تدخل البهو العظيم.", "en": "I'm Ramesses II, one of Egypt's most famous kings. I stand about 11 metres tall, the first thing you see in the Grand Hall." },
-        "home": { "ar": "بيتي الأصلي في منف، عاصمة مصر القديمة، في ميت رهينة جنب معبد الإله بتاح.", "en": "My original home is Memphis, the ancient capital, at Mit Rahina near the temple of the god Ptah." },
-        "found": { "ar": "اتلقيت سنة 1820 في منف وأنا مكسور لأجزاء.", "en": "I was found in 1820 at Memphis, broken into parts." },
-        "journey": { "ar": "سنة 1955 حطوني في ميدان رمسيس في القاهرة، وفضلت هناك 50 سنة. سنة 2006 اتنقلت للمتحف الكبير، وسنة 2018 دخلت البهو العظيم.", "en": "In 1955 I was placed in Ramses Square in Cairo and stood there for 50 years. In 2006 I moved to the Grand Egyptian Museum, and in 2018 into the Grand Hall." },
-        "made": { "ar": "أنا منحوت من الجرانيت الأحمر، ووزني حوالي 83 طن.", "en": "I'm carved from red granite and weigh about 83 tonnes." }
+      "id": "ramesses",
+      "code": "102",
+      "site": "memphis",
+      "name": {
+        "ar": "تمثال رمسيس الثاني العملاق",
+        "en": "Colossal statue of Ramesses II"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Statue_of_Ramesses_II"]
+      "hall": {
+        "ar": "البهو العظيم",
+        "en": "Grand Hall"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا رمسيس التاني، أشهر ملوك مصر. طولي حوالي 11 متر، وأول حاجة بتشوفها لما تدخل البهو العظيم.",
+          "en": "I'm Ramesses II, one of Egypt's most famous kings. I stand about 11 metres tall, the first thing you see in the Grand Hall."
+        },
+        "home": {
+          "ar": "بيتي الأصلي في منف، عاصمة مصر القديمة، في ميت رهينة جنب معبد الإله بتاح.",
+          "en": "My original home is Memphis, the ancient capital, at Mit Rahina near the temple of the god Ptah."
+        },
+        "found": {
+          "ar": "اتلقيت سنة 1820 في منف وأنا مكسور لأجزاء.",
+          "en": "I was found in 1820 at Memphis, broken into parts."
+        },
+        "journey": {
+          "ar": "سنة 1955 حطوني في ميدان رمسيس في القاهرة، وفضلت هناك 50 سنة. سنة 2006 اتنقلت للمتحف الكبير، وسنة 2018 دخلت البهو العظيم.",
+          "en": "In 1955 I was placed in Ramses Square in Cairo and stood there for 50 years. In 2006 I moved to the Grand Egyptian Museum, and in 2018 into the Grand Hall."
+        },
+        "made": {
+          "ar": "أنا منحوت من الجرانيت الأحمر، ووزني حوالي 83 طن.",
+          "en": "I'm carved from red granite and weigh about 83 tonnes."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Statue_of_Ramesses_II"
+      ]
     },
     {
-      "id": "obelisk", "code": "103", "site": "tanis",
-      "name": { "ar": "المسلة المعلّقة لرمسيس الثاني", "en": "Hanging Obelisk of Ramesses II" },
-      "hall": { "ar": "ساحة المدخل", "en": "Entrance plaza" },
-      "facts": {
-        "intro": { "ar": "أنا المسلة اللي بتستقبلك قدام المتحف. أنا معلّقة، فتقدر تمشي تحتي وتبص لفوق.", "en": "I'm the obelisk that welcomes you outside the museum. I'm suspended, so you can walk underneath and look up." },
-        "home": { "ar": "بيتي في صان الحجر (تانيس) في محافظة الشرقية، مدينة كانت كبيرة جداً في الدلتا.", "en": "My home is San el-Hagar (Tanis) in Sharqia, once a great city of the Delta." },
-        "found": { "ar": "كنت في تانيس، المدينة اللي اتنقل لها حجارة ومسلات كتير من عصر رمسيس التاني.", "en": "I lay at Tanis, a city where many stones and obelisks from Ramesses II's era were brought." },
-        "journey": { "ar": "اتنقلت لساحة المتحف واتركبت بطريقة مختلفة: قاعدتي فوق الأرض، فتقدر تشوف خرطوش رمسيس المنقوش تحتي.", "en": "I was moved to the museum plaza and raised in a new way: my base is lifted so you can see Ramesses' cartouche carved beneath me." },
-        "made": { "ar": "أنا من الجرانيت، طولي حوالي 16 متر، ووزني أكتر من 100 طن.", "en": "I'm granite, about 16 metres tall, and weigh more than 100 tonnes." }
+      "id": "obelisk",
+      "code": "103",
+      "site": "tanis",
+      "name": {
+        "ar": "المسلة المعلّقة لرمسيس الثاني",
+        "en": "Hanging Obelisk of Ramesses II"
       },
-      "sources": ["https://english.ahram.org.eg/WorldCup/News/169079.aspx"]
+      "hall": {
+        "ar": "ساحة المدخل",
+        "en": "Entrance plaza"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا المسلة اللي بتستقبلك قدام المتحف. أنا معلّقة، فتقدر تمشي تحتي وتبص لفوق.",
+          "en": "I'm the obelisk that welcomes you outside the museum. I'm suspended, so you can walk underneath and look up."
+        },
+        "home": {
+          "ar": "بيتي في صان الحجر (تانيس) في محافظة الشرقية، مدينة كانت كبيرة جداً في الدلتا.",
+          "en": "My home is San el-Hagar (Tanis) in Sharqia, once a great city of the Delta."
+        },
+        "found": {
+          "ar": "كنت في تانيس، المدينة اللي اتنقل لها حجارة ومسلات كتير من عصر رمسيس التاني.",
+          "en": "I lay at Tanis, a city where many stones and obelisks from Ramesses II's era were brought."
+        },
+        "journey": {
+          "ar": "اتنقلت لساحة المتحف واتركبت بطريقة مختلفة: قاعدتي فوق الأرض، فتقدر تشوف خرطوش رمسيس المنقوش تحتي.",
+          "en": "I was moved to the museum plaza and raised in a new way: my base is lifted so you can see Ramesses' cartouche carved beneath me."
+        },
+        "made": {
+          "ar": "أنا من الجرانيت، طولي حوالي 16 متر، ووزني أكتر من 100 طن.",
+          "en": "I'm granite, about 16 metres tall, and weigh more than 100 tonnes."
+        }
+      },
+      "sources": [
+        "https://english.ahram.org.eg/WorldCup/News/169079.aspx"
+      ]
     },
     {
-      "id": "mask", "code": "201", "site": "kv",
-      "name": { "ar": "القناع الذهبي لتوت عنخ آمون", "en": "Golden Mask of Tutankhamun" },
-      "hall": { "ar": "قاعات توت عنخ آمون", "en": "Tutankhamun Galleries" },
-      "facts": {
-        "intro": { "ar": "أنا قناع الملك توت عنخ آمون. يمكن أشهر وش في الدنيا!", "en": "I'm the mask of King Tutankhamun. Perhaps the most famous face in the world!" },
-        "home": { "ar": "بيتي مقبرة KV62 في وادي الملوك في الأقصر. كنت على وش مومياء الملك نفسه.", "en": "My home is tomb KV62 in the Valley of the Kings, Luxor. I rested on the king's own mummy." },
-        "found": { "ar": "هوارد كارتر اكتشف المقبرة سنة 1922، بس أنا ما ظهرتش غير سنة 1925 لما فتحوا التوابيت.", "en": "Howard Carter discovered the tomb in 1922, but I only appeared in 1925 when the coffins were opened." },
-        "journey": { "ar": "فضلت سنين طويلة في المتحف المصري في التحرير، وبعدين اتنقلت للمتحف الكبير مع باقي كنوز توت.", "en": "I spent many years at the Egyptian Museum in Tahrir, then moved to the Grand Egyptian Museum with the rest of Tut's treasures." },
-        "made": { "ar": "أنا من الدهب، وزني حوالي 10 كيلو، ومطعّم بأحجار زي اللازورد والفيروز والعقيق.", "en": "I'm gold, about 10 kilograms, inlaid with stones like lapis lazuli, turquoise and carnelian." }
+      "id": "boat2",
+      "code": "104",
+      "site": "giza",
+      "name": {
+        "ar": "مركب خوفو التانية",
+        "en": "Khufu's second boat"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Mask_of_Tutankhamun", "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"]
+      "hall": {
+        "ar": "متحف مراكب خوفو",
+        "en": "Khufu Boats Museum"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا المركب التانية للملك خوفو، أخت المركب الأولى. أنا لسه بتركّب قدام عينيك!",
+          "en": "I'm King Khufu's second boat, sister of the first. I'm still being rebuilt right in front of you!"
+        },
+        "home": {
+          "ar": "بيتي حفرة تانية جنب الهرم الأكبر في الجيزة، جنب الحفرة اللي كانت فيها أختي.",
+          "en": "My home is a second pit beside the Great Pyramid at Giza, next to the one that held my sister."
+        },
+        "found": {
+          "ar": "حفرتي اتعرفت سنة 1954 مع حفرة أختي، بس فضلت مقفولة سنين طويلة لحد ما فريق مصري ياباني بدأ يطلّعني.",
+          "en": "My pit was identified in 1954 along with my sister's, but stayed sealed for many years until an Egyptian-Japanese team began lifting me out."
+        },
+        "journey": {
+          "ar": "قطعي الخشب اتنقلت للمتحف الكبير، وبيترمّموا ويتركّبوا هنا قدام الزوار.",
+          "en": "My wooden pieces were moved to the Grand Egyptian Museum, where they are restored and reassembled in front of visitors."
+        },
+        "made": {
+          "ar": "أنا من الخشب زي أختي، ومتفككة لمئات القطع اللي لازم تترمّم واحدة واحدة.",
+          "en": "Like my sister I'm made of wood, in hundreds of pieces that must be restored one by one."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Khufu_ship"
+      ]
     },
     {
-      "id": "throne", "code": "202", "site": "kv",
-      "name": { "ar": "العرش الذهبي", "en": "The Golden Throne" },
-      "hall": { "ar": "قاعات توت عنخ آمون", "en": "Tutankhamun Galleries" },
-      "facts": {
-        "intro": { "ar": "أنا عرش توت عنخ آمون. بص على ضهري: هتلاقي الملك ومراته عنخ إس إن آمون.", "en": "I'm Tutankhamun's throne. Look at my back: you'll see the king and his wife Ankhesenamun." },
-        "home": { "ar": "بيتي مقبرة توت (KV62) في وادي الملوك بالأقصر.", "en": "My home is Tut's tomb (KV62) in the Valley of the Kings, Luxor." },
-        "found": { "ar": "كارتر لقاني في أول أوضة في المقبرة، الأوضة اللي سمّوها الأنتيكامبر، بعد الاكتشاف سنة 1922.", "en": "Carter found me in the tomb's first room, the antechamber, after the 1922 discovery." },
-        "journey": { "ar": "اتنقلت من المقبرة للمتحف المصري في التحرير، ودلوقتي في المتحف الكبير.", "en": "I travelled from the tomb to the Egyptian Museum in Tahrir, and now I'm at the Grand Egyptian Museum." },
-        "made": { "ar": "أنا خشب متغطي بالدهب، ومطعّم بالزجاج الملوّن والأحجار. وفوق الملك والملكة فيه شمس آتون بإيدين.", "en": "I'm wood covered in gold, inlaid with coloured glass and stones. Above the royal couple shines the Aten sun with its rays ending in hands." }
+      "id": "mask",
+      "code": "201",
+      "site": "kv",
+      "name": {
+        "ar": "القناع الذهبي لتوت عنخ آمون",
+        "en": "Golden Mask of Tutankhamun"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"]
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا قناع الملك توت عنخ آمون. يمكن أشهر وش في الدنيا!",
+          "en": "I'm the mask of King Tutankhamun. Perhaps the most famous face in the world!"
+        },
+        "home": {
+          "ar": "بيتي مقبرة KV62 في وادي الملوك في الأقصر. كنت على وش مومياء الملك نفسه.",
+          "en": "My home is tomb KV62 in the Valley of the Kings, Luxor. I rested on the king's own mummy."
+        },
+        "found": {
+          "ar": "هوارد كارتر اكتشف المقبرة سنة 1922، بس أنا ما ظهرتش غير سنة 1925 لما فتحوا التوابيت.",
+          "en": "Howard Carter discovered the tomb in 1922, but I only appeared in 1925 when the coffins were opened."
+        },
+        "journey": {
+          "ar": "فضلت سنين طويلة في المتحف المصري في التحرير، وبعدين اتنقلت للمتحف الكبير مع باقي كنوز توت.",
+          "en": "I spent many years at the Egyptian Museum in Tahrir, then moved to the Grand Egyptian Museum with the rest of Tut's treasures."
+        },
+        "made": {
+          "ar": "أنا من الدهب، وزني حوالي 10 كيلو، ومطعّم بأحجار زي اللازورد والفيروز والعقيق.",
+          "en": "I'm gold, about 10 kilograms, inlaid with stones like lapis lazuli, turquoise and carnelian."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Mask_of_Tutankhamun",
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
     },
     {
-      "id": "dagger", "code": "203", "site": "kv",
-      "name": { "ar": "خنجر حديد النيزك", "en": "Meteoritic iron dagger" },
-      "hall": { "ar": "قاعات توت عنخ آمون", "en": "Tutankhamun Galleries" },
-      "facts": {
-        "intro": { "ar": "أنا خنجر توت عنخ آمون، وحديدي جاي من السما حرفياً: من نيزك!", "en": "I'm Tutankhamun's dagger, and my iron literally came from the sky: a meteorite!" },
-        "home": { "ar": "بيتي مقبرة توت (KV62) في وادي الملوك.", "en": "My home is Tut's tomb (KV62) in the Valley of the Kings." },
-        "found": { "ar": "اتلقيت سنة 1925 ملفوف مع مومياء الملك نفسها.", "en": "I was found in 1925, wrapped with the king's mummy itself." },
-        "journey": { "ar": "سنة 2016 علماء حلّلوا الحديد بتاعي وأكدوا إنه من نيزك، بسبب نسبة النيكل العالية فيه.", "en": "In 2016 scientists analysed my iron and confirmed it came from a meteorite, thanks to its high nickel content." },
-        "made": { "ar": "نصلي من حديد النيزك، وغمدي من الدهب. ده في عصر كان الحديد فيه أندر من الدهب.", "en": "My blade is meteoritic iron and my sheath is gold, from an age when iron was rarer than gold." }
+      "id": "throne",
+      "code": "202",
+      "site": "kv",
+      "name": {
+        "ar": "العرش الذهبي",
+        "en": "The Golden Throne"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Tutankhamun%27s_meteoric_iron_dagger"]
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا عرش توت عنخ آمون. بص على ضهري: هتلاقي الملك ومراته عنخ إس إن آمون.",
+          "en": "I'm Tutankhamun's throne. Look at my back: you'll see the king and his wife Ankhesenamun."
+        },
+        "home": {
+          "ar": "بيتي مقبرة توت (KV62) في وادي الملوك بالأقصر.",
+          "en": "My home is Tut's tomb (KV62) in the Valley of the Kings, Luxor."
+        },
+        "found": {
+          "ar": "كارتر لقاني في أول أوضة في المقبرة، الأوضة اللي سمّوها الأنتيكامبر، بعد الاكتشاف سنة 1922.",
+          "en": "Carter found me in the tomb's first room, the antechamber, after the 1922 discovery."
+        },
+        "journey": {
+          "ar": "اتنقلت من المقبرة للمتحف المصري في التحرير، ودلوقتي في المتحف الكبير.",
+          "en": "I travelled from the tomb to the Egyptian Museum in Tahrir, and now I'm at the Grand Egyptian Museum."
+        },
+        "made": {
+          "ar": "أنا خشب متغطي بالدهب، ومطعّم بالزجاج الملوّن والأحجار. وفوق الملك والملكة فيه شمس آتون بإيدين.",
+          "en": "I'm wood covered in gold, inlaid with coloured glass and stones. Above the royal couple shines the Aten sun with its rays ending in hands."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
     },
     {
-      "id": "chariots", "code": "204", "site": "kv",
-      "name": { "ar": "العربات الحربية", "en": "The chariots" },
-      "hall": { "ar": "قاعات توت عنخ آمون", "en": "Tutankhamun Galleries" },
-      "facts": {
-        "intro": { "ar": "إحنا عربيات توت عنخ آمون. كنا ست عربيات في المقبرة!", "en": "We are Tutankhamun's chariots. There were six of us in the tomb!" },
-        "home": { "ar": "بيتنا مقبرة KV62 في وادي الملوك بالأقصر.", "en": "Our home is tomb KV62 in the Valley of the Kings, Luxor." },
-        "found": { "ar": "كارتر لقانا متفككين جوه المقبرة، علشان ما كناش هنعدّي من الممر الضيق وإحنا متركبين.", "en": "Carter found us dismantled inside the tomb, because we wouldn't fit through the narrow corridor fully assembled." },
-        "journey": { "ar": "اتركّبنا تاني واتعرضنا في المتحف المصري، ودلوقتي إحنا في المتحف الكبير.", "en": "We were reassembled and shown at the Egyptian Museum, and now we're at the Grand Egyptian Museum." },
-        "made": { "ar": "معمولين من خشب خفيف ومتغطيين بالدهب في حتت كتير، علشان نكون سريعين وفخمين في نفس الوقت.", "en": "We're made of light wood, covered with gold in many places: fast and grand at the same time." }
+      "id": "dagger",
+      "code": "203",
+      "site": "kv",
+      "name": {
+        "ar": "خنجر حديد النيزك",
+        "en": "Meteoritic iron dagger"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"]
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا خنجر توت عنخ آمون، وحديدي جاي من السما حرفياً: من نيزك!",
+          "en": "I'm Tutankhamun's dagger, and my iron literally came from the sky: a meteorite!"
+        },
+        "home": {
+          "ar": "بيتي مقبرة توت (KV62) في وادي الملوك.",
+          "en": "My home is Tut's tomb (KV62) in the Valley of the Kings."
+        },
+        "found": {
+          "ar": "اتلقيت سنة 1925 ملفوف مع مومياء الملك نفسها.",
+          "en": "I was found in 1925, wrapped with the king's mummy itself."
+        },
+        "journey": {
+          "ar": "سنة 2016 علماء حلّلوا الحديد بتاعي وأكدوا إنه من نيزك، بسبب نسبة النيكل العالية فيه.",
+          "en": "In 2016 scientists analysed my iron and confirmed it came from a meteorite, thanks to its high nickel content."
+        },
+        "made": {
+          "ar": "نصلي من حديد النيزك، وغمدي من الدهب. ده في عصر كان الحديد فيه أندر من الدهب.",
+          "en": "My blade is meteoritic iron and my sheath is gold, from an age when iron was rarer than gold."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_meteoric_iron_dagger"
+      ]
     },
     {
-      "id": "trumpets", "code": "205", "site": "kv",
-      "name": { "ar": "الأبواق", "en": "The trumpets" },
-      "hall": { "ar": "قاعات توت عنخ آمون", "en": "Tutankhamun Galleries" },
-      "facts": {
-        "intro": { "ar": "إحنا بوقين بتوع توت عنخ آمون، واحد فضة وواحد نحاس. من أقدم الأبواق اللي لسه بتشتغل في الدنيا!", "en": "We're Tutankhamun's two trumpets, one silver and one copper alloy, among the oldest working trumpets in the world!" },
-        "home": { "ar": "بيتنا مقبرة KV62 في وادي الملوك.", "en": "Our home is tomb KV62 in the Valley of the Kings." },
-        "found": { "ar": "اتلقينا في المقبرة اللي اكتشفها هوارد كارتر سنة 1922.", "en": "We were found in the tomb Howard Carter discovered in 1922." },
-        "journey": { "ar": "سنة 1939 عزفوا علينا في إذاعة الـBBC، وناس كتير سمعت صوتنا لأول مرة من آلاف السنين.", "en": "In 1939 we were played on a BBC radio broadcast, and many people heard our voice for the first time in thousands of years." },
-        "made": { "ar": "واحد فينا من الفضة والتاني من النحاس أو البرونز، وكنا بنستخدم غالباً في الجيش والطقوس.", "en": "One of us is silver and the other copper or bronze; we were likely used in the army and in rituals." }
+      "id": "chariots",
+      "code": "204",
+      "site": "kv",
+      "name": {
+        "ar": "العربات الحربية",
+        "en": "The chariots"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Tutankhamun%27s_trumpets"]
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "إحنا عربيات توت عنخ آمون. كنا ست عربيات في المقبرة!",
+          "en": "We are Tutankhamun's chariots. There were six of us in the tomb!"
+        },
+        "home": {
+          "ar": "بيتنا مقبرة KV62 في وادي الملوك بالأقصر.",
+          "en": "Our home is tomb KV62 in the Valley of the Kings, Luxor."
+        },
+        "found": {
+          "ar": "كارتر لقانا متفككين جوه المقبرة، علشان ما كناش هنعدّي من الممر الضيق وإحنا متركبين.",
+          "en": "Carter found us dismantled inside the tomb, because we wouldn't fit through the narrow corridor fully assembled."
+        },
+        "journey": {
+          "ar": "اتركّبنا تاني واتعرضنا في المتحف المصري، ودلوقتي إحنا في المتحف الكبير.",
+          "en": "We were reassembled and shown at the Egyptian Museum, and now we're at the Grand Egyptian Museum."
+        },
+        "made": {
+          "ar": "معمولين من خشب خفيف ومتغطيين بالدهب في حتت كتير، علشان نكون سريعين وفخمين في نفس الوقت.",
+          "en": "We're made of light wood, covered with gold in many places: fast and grand at the same time."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
     },
     {
-      "id": "anubis", "code": "206", "site": "kv",
-      "name": { "ar": "مقصورة أنوبيس", "en": "The Anubis shrine" },
-      "hall": { "ar": "قاعات توت عنخ آمون", "en": "Tutankhamun Galleries" },
-      "facts": {
-        "intro": { "ar": "أنا أنوبيس، حارس المقابر. قاعد على مقصورة، وعيني عليك!", "en": "I'm Anubis, guardian of tombs. I sit atop my shrine, and I'm watching you!" },
-        "home": { "ar": "بيتي مقبرة توت (KV62) في وادي الملوك.", "en": "My home is Tut's tomb (KV62) in the Valley of the Kings." },
-        "found": { "ar": "اتلقيت قاعد على باب الأوضة اللي سمّوها الخزانة، كأني بحرس كنوز الملك.", "en": "I was found sitting at the doorway of the room they called the Treasury, as if guarding the king's treasures." },
-        "journey": { "ar": "اتنقلت من المقبرة للمتحف المصري، ودلوقتي في المتحف الكبير مع باقي كنوز توت.", "en": "I moved from the tomb to the Egyptian Museum, and now I'm at the Grand Egyptian Museum with the rest of Tut's treasures." },
-        "made": { "ar": "أنا خشب متلوّن أسود، ومزيّن بالدهب. والمقصورة اللي تحتي ليها عصيان علشان تتشال زي الموكب.", "en": "I'm wood painted black and decorated with gold. The shrine under me has carrying poles, so it could be borne in procession." }
+      "id": "trumpets",
+      "code": "205",
+      "site": "kv",
+      "name": {
+        "ar": "الأبواق",
+        "en": "The trumpets"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"]
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "إحنا بوقين بتوع توت عنخ آمون، واحد فضة وواحد نحاس. من أقدم الأبواق اللي لسه بتشتغل في الدنيا!",
+          "en": "We're Tutankhamun's two trumpets, one silver and one copper alloy, among the oldest working trumpets in the world!"
+        },
+        "home": {
+          "ar": "بيتنا مقبرة KV62 في وادي الملوك.",
+          "en": "Our home is tomb KV62 in the Valley of the Kings."
+        },
+        "found": {
+          "ar": "اتلقينا في المقبرة اللي اكتشفها هوارد كارتر سنة 1922.",
+          "en": "We were found in the tomb Howard Carter discovered in 1922."
+        },
+        "journey": {
+          "ar": "سنة 1939 عزفوا علينا في إذاعة الـBBC، وناس كتير سمعت صوتنا لأول مرة من آلاف السنين.",
+          "en": "In 1939 we were played on a BBC radio broadcast, and many people heard our voice for the first time in thousands of years."
+        },
+        "made": {
+          "ar": "واحد فينا من الفضة والتاني من النحاس أو البرونز، وكنا بنستخدم غالباً في الجيش والطقوس.",
+          "en": "One of us is silver and the other copper or bronze; we were likely used in the army and in rituals."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_trumpets"
+      ]
     },
     {
-      "id": "amenhotep", "code": "301", "site": "hettan",
-      "name": { "ar": "أمنحتب الثالث مع رع حور آختي", "en": "Amenhotep III with Ra-Horakhty" },
-      "hall": { "ar": "الدرج العظيم", "en": "Grand Staircase" },
-      "facts": {
-        "intro": { "ar": "أنا الملك أمنحتب التالت، وجنبي الإله رع حور آختي. هتلاقينا على الدرج العظيم.", "en": "I'm King Amenhotep III, with the god Ra-Horakhty beside me. You'll find us on the Grand Staircase." },
-        "home": { "ar": "بيتي كوم الحيتان في البر الغربي بالأقصر، مكان معبدي الجنائزي جنب تمثالي ممنون.", "en": "My home is Kom el-Hettan on Luxor's West Bank, site of my mortuary temple beside the Colossi of Memnon." },
-        "found": { "ar": "اتلقيت في كوم الحيتان سنة 2009.", "en": "I was found at Kom el-Hettan in 2009." },
-        "journey": { "ar": "من الأقصر اتنقلت للمتحف الكبير، ودلوقتي واقف على الدرج العظيم مع ملوك تانيين.", "en": "From Luxor I travelled to the Grand Egyptian Museum, and now I stand on the Grand Staircase among other kings." },
-        "made": { "ar": "أنا تمثال ضخم منحوت من الحجر، والملك والإله واقفين جنب بعض كأنهم متساويين.", "en": "I'm a large statue carved in stone, king and god side by side as equals." }
+      "id": "anubis",
+      "code": "206",
+      "site": "kv",
+      "name": {
+        "ar": "مقصورة أنوبيس",
+        "en": "The Anubis shrine"
       },
-      "sources": ["https://en.wikipedia.org/wiki/Kom_el-Hettan"]
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا أنوبيس، حارس المقابر. قاعد على مقصورة، وعيني عليك!",
+          "en": "I'm Anubis, guardian of tombs. I sit atop my shrine, and I'm watching you!"
+        },
+        "home": {
+          "ar": "بيتي مقبرة توت (KV62) في وادي الملوك.",
+          "en": "My home is Tut's tomb (KV62) in the Valley of the Kings."
+        },
+        "found": {
+          "ar": "اتلقيت قاعد على باب الأوضة اللي سمّوها الخزانة، كأني بحرس كنوز الملك.",
+          "en": "I was found sitting at the doorway of the room they called the Treasury, as if guarding the king's treasures."
+        },
+        "journey": {
+          "ar": "اتنقلت من المقبرة للمتحف المصري، ودلوقتي في المتحف الكبير مع باقي كنوز توت.",
+          "en": "I moved from the tomb to the Egyptian Museum, and now I'm at the Grand Egyptian Museum with the rest of Tut's treasures."
+        },
+        "made": {
+          "ar": "أنا خشب متلوّن أسود، ومزيّن بالدهب. والمقصورة اللي تحتي ليها عصيان علشان تتشال زي الموكب.",
+          "en": "I'm wood painted black and decorated with gold. The shrine under me has carrying poles, so it could be borne in procession."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
+    },
+    {
+      "id": "coffin",
+      "code": "207",
+      "site": "kv",
+      "name": {
+        "ar": "التابوت الذهبي لتوت عنخ آمون",
+        "en": "Tutankhamun's gold coffin"
+      },
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا التابوت الداخلي لتوت عنخ آمون، والمومياء بتاعته كانت جوايا.",
+          "en": "I'm Tutankhamun's innermost coffin; his mummy lay inside me."
+        },
+        "home": {
+          "ar": "بيتي مقبرة KV62 في وادي الملوك بالأقصر.",
+          "en": "My home is tomb KV62 in the Valley of the Kings, Luxor."
+        },
+        "found": {
+          "ar": "كنت جوه تابوتين تانيين، وكلنا جوه تابوت حجر. هوارد كارتر وصل لي سنة 1925.",
+          "en": "I lay inside two other coffins, all within a stone sarcophagus. Howard Carter reached me in 1925."
+        },
+        "journey": {
+          "ar": "فضلت سنين طويلة في المتحف المصري في التحرير، ودلوقتي في المتحف الكبير مع باقي كنوز توت.",
+          "en": "I spent many years at the Egyptian Museum in Tahrir, and now I'm at the Grand Egyptian Museum with the rest of Tut's treasures."
+        },
+        "made": {
+          "ar": "أنا معمول من الدهب، ووزني حوالي 110 كيلو، ومزيّن بأحجار وزجاج ملوّن.",
+          "en": "I'm made of gold, weigh about 110 kilograms, and I'm decorated with stones and coloured glass."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
+    },
+    {
+      "id": "guardians",
+      "code": "208",
+      "site": "kv",
+      "name": {
+        "ar": "تمثالين الحراس",
+        "en": "The guardian statues"
+      },
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "إحنا تمثالين للملك توت عنخ آمون بالحجم الطبيعي، وشغلتنا كانت حراسة باب أوضة الدفن.",
+          "en": "We are two life-size statues of King Tutankhamun, and our job was guarding the burial chamber door."
+        },
+        "home": {
+          "ar": "بيتنا مقبرة KV62 في وادي الملوك بالأقصر.",
+          "en": "Our home is tomb KV62 in the Valley of the Kings, Luxor."
+        },
+        "found": {
+          "ar": "كارتر لقانا سنة 1922 واقفين على جنبين الباب المقفول اللي ورا منه أوضة الدفن.",
+          "en": "Carter found us in 1922, standing either side of the sealed doorway to the burial chamber."
+        },
+        "journey": {
+          "ar": "من المقبرة رحنا المتحف المصري في التحرير، ودلوقتي إحنا في المتحف الكبير.",
+          "en": "From the tomb we went to the Egyptian Museum in Tahrir, and now we're at the Grand Egyptian Museum."
+        },
+        "made": {
+          "ar": "معمولين من الخشب، ولونّا أسود، وعلينا تفاصيل بالدهب زي غطا الراس والصندل.",
+          "en": "We're made of wood painted black, with gilded details such as the headdress and sandals."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
+    },
+    {
+      "id": "canopic",
+      "code": "209",
+      "site": "kv",
+      "name": {
+        "ar": "صندوق الأحشاء (الكانوبي)",
+        "en": "The canopic chest"
+      },
+      "hall": {
+        "ar": "قاعات توت عنخ آمون",
+        "en": "Tutankhamun Galleries"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا الصندوق اللي كان شايل أحشاء الملك توت عنخ آمون بعد التحنيط.",
+          "en": "I'm the chest that held King Tutankhamun's internal organs after mummification."
+        },
+        "home": {
+          "ar": "بيتي مقبرة KV62 في وادي الملوك، في الأوضة اللي سمّوها الخزانة.",
+          "en": "My home is tomb KV62 in the Valley of the Kings, in the room called the Treasury."
+        },
+        "found": {
+          "ar": "اتلقيت جوه مقصورة مدهّبة، وحواليها أربع إلهات بيحموها.",
+          "en": "I was found inside a gilded shrine, protected by four goddesses around it."
+        },
+        "journey": {
+          "ar": "اتنقلت من المقبرة للمتحف المصري، ودلوقتي في المتحف الكبير.",
+          "en": "I moved from the tomb to the Egyptian Museum, and now I'm at the Grand Egyptian Museum."
+        },
+        "made": {
+          "ar": "أنا من الألباستر (الكالسيت)، وجوايا أربع خانات، وكل غطا على شكل راس الملك.",
+          "en": "I'm carved from alabaster (calcite), with four compartments inside, each lid shaped like the king's head."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tutankhamun%27s_tomb"
+      ]
+    },
+    {
+      "id": "amenhotep",
+      "code": "301",
+      "site": "hettan",
+      "name": {
+        "ar": "أمنحتب الثالث مع رع حور آختي",
+        "en": "Amenhotep III with Ra-Horakhty"
+      },
+      "hall": {
+        "ar": "الدرج العظيم",
+        "en": "Grand Staircase"
+      },
+      "facts": {
+        "intro": {
+          "ar": "أنا الملك أمنحتب التالت، وجنبي الإله رع حور آختي. هتلاقينا على الدرج العظيم.",
+          "en": "I'm King Amenhotep III, with the god Ra-Horakhty beside me. You'll find us on the Grand Staircase."
+        },
+        "home": {
+          "ar": "بيتي كوم الحيتان في البر الغربي بالأقصر، مكان معبدي الجنائزي جنب تمثالي ممنون.",
+          "en": "My home is Kom el-Hettan on Luxor's West Bank, site of my mortuary temple beside the Colossi of Memnon."
+        },
+        "found": {
+          "ar": "اتلقيت في كوم الحيتان سنة 2009.",
+          "en": "I was found at Kom el-Hettan in 2009."
+        },
+        "journey": {
+          "ar": "من الأقصر اتنقلت للمتحف الكبير، ودلوقتي واقف على الدرج العظيم مع ملوك تانيين.",
+          "en": "From Luxor I travelled to the Grand Egyptian Museum, and now I stand on the Grand Staircase among other kings."
+        },
+        "made": {
+          "ar": "أنا تمثال ضخم منحوت من الحجر، والملك والإله واقفين جنب بعض كأنهم متساويين.",
+          "en": "I'm a large statue carved in stone, king and god side by side as equals."
+        }
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Kom_el-Hettan"
+      ]
     }
   ]
 }

@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root{
   --bg:#14110e; --panel:#1d1915; --panel2:#262019; --line:#3a3128;
@@ -59,7 +61,29 @@ p.sub{color:var(--muted);margin:0 0 14px;line-height:1.7}
 
 /* map */
 .mapbox{background:#10151c;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:14px}
-.mapbox svg{display:block;width:100%;height:auto;direction:ltr}
+#map{height:min(62vh,520px);direction:ltr;background:#0e1217}
+.leaflet-container{font-family:inherit}
+.leaflet-control-attribution{background:rgba(20,17,14,.75)!important;color:#9b8c76!important}
+.leaflet-control-attribution a{color:#c9b89c!important}
+.leaflet-bar a{background:#1d1915!important;color:var(--text)!important;border-color:var(--line)!important}
+.mk{position:relative;width:30px;height:30px;cursor:pointer}
+.mk b{width:30px;height:30px;flex:none;border-radius:50%;background:var(--gold);color:#1b140a;display:grid;place-items:center;border:2px solid #1b140a;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.mk.loved b{background:#ff8f6b}
+.mk.sel b{outline:3px solid var(--gold2);outline-offset:2px}
+.mk span{position:absolute;top:50%;left:36px;transform:translateY(-50%);white-space:nowrap;font-weight:700;font-size:13px;color:var(--text);text-shadow:0 0 3px #000,0 0 6px #000;pointer-events:none}
+.mk.l span{left:auto;right:36px}
+.mk.nl span{display:none}
+.mk.grp b{box-shadow:0 0 0 4px rgba(227,170,79,.35),0 2px 8px rgba(0,0,0,.5)}
+.mk.gem{width:16px;height:16px;margin:7px}
+.mk.gem span{left:24px}.mk.gem.l span{left:auto;right:24px}
+.mk.gem b{width:16px;height:16px;border-radius:3px;transform:rotate(45deg);background:var(--text)}
+.iconbtn{display:grid;place-items:center;width:46px;flex:none;padding:0}
+.iconbtn svg{width:22px;height:22px}
+.iconbtn.on{background:#ff8f6b;border-color:#ff8f6b;color:#1b140a}
+.scanning{position:fixed;inset:0;z-index:90;background:rgba(10,8,6,.8);display:grid;place-items:center;color:var(--text);font-size:18px}
+.sheet{position:fixed;inset:auto 0 0;z-index:85;background:var(--panel);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+.sheet h4{margin:0 0 10px}
+.say{background:none;border:0;color:var(--muted);font-size:13px;padding:2px 0 0;display:block}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-inline-end:4px}
 .pin{cursor:pointer}
@@ -151,6 +175,7 @@ footer.f{color:var(--muted);font-size:12px;line-height:1.9;padding:24px 0 10px;b
 footer.f a{color:var(--muted)}
 footer.f button{background:none;border:0;color:var(--gold);text-decoration:underline;padding:0;font-size:12px}
 @media(max-width:430px){.logo span{display:none}}
+[hidden]{display:none!important}
 #toast{position:fixed;bottom:calc(var(--nav) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#1b140a;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%)}
 </style>
@@ -171,7 +196,7 @@ footer.f button{background:none;border:0;color:var(--gold);text-decoration:under
       <p data-t="lead">كل قطعة في المتحف بتحكيلك حكايتها بنفسها، وفي الآخر بتقولك: تعالى زورني في بيتي. القطع اللي تحبها بتتحول لرحلة لأماكنها الحقيقية في مصر.</p>
       <div class="status"><i class="dot" id="dot"></i><span id="status">…</span></div>
     </div>
-    <div class="search"><input id="q" inputmode="search" autocomplete="off"></div>
+    <div class="search"><input id="q" inputmode="search" autocomplete="off"><button class="btn iconbtn" id="scan" hidden aria-label="scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.5"/></svg></button><input type="file" id="scanf" accept="image/*" capture="environment" hidden></div>
     <div class="grid" id="grid"></div>
   </section>
 
@@ -179,7 +204,7 @@ footer.f button{background:none;border:0;color:var(--gold);text-decoration:under
   <section class="view" id="v-map">
     <h2 class="sec" data-t="mapH">بيوت القطع على الخريطة</h2>
     <p class="sub" data-t="mapSub">كل نقطة مكان اتلقت فيه قطعة. الرقم = عدد القطع اللي جت منه.</p>
-    <div class="mapbox"><svg id="map" viewBox="0 0 655 642" role="img"></svg>
+    <div class="mapbox"><div id="map" role="application" aria-label="map"></div>
       <div class="legend"><span><i style="background:var(--gold)"></i><span data-t="lgSite">موقع اكتشاف</span></span><span><i style="background:#ff8f6b"></i><span data-t="lgLoved">فيه قطعة حبيتها</span></span><span><i style="background:var(--text)"></i><span data-t="lgGem">المتحف</span></span></div>
     </div>
     <div id="site"></div>
@@ -203,9 +228,9 @@ footer.f button{background:none;border:0;color:var(--gold);text-decoration:under
   </section>
 
   <footer class="f">
-    <div data-t="foot">بيتي · مشروع لهاكاثون المتحف المصري الكبير 2026 · بيانات تجريبية: 10 قطع من 5 مواقع، والمتحف يقدر يوصّله بقاعدة بياناته الكاملة.</div>
+    <div id="foot"></div>
     <div><span data-t="note">المسافات بخط مستقيم وتقريبية، ومواعيد الزيارة لازم تتأكد منها قبل السفر.</span>
-      · <button id="demo"></button></div>
+      · <button id="demo"></button> · <a href="/admin" data-t="admin">لوحة التحكم</a></div>
   </footer>
 </main>
 
@@ -215,14 +240,15 @@ footer.f button{background:none;border:0;color:var(--gold);text-decoration:under
     <div style="display:flex;align-items:center;gap:10px">
       <button class="back" id="back" aria-label="back">→</button>
       <div class="av" id="cav"></div>
-      <div><div class="nm" id="cnm"></div><small id="chl"></small></div>
+      <div style="flex:1;min-width:0"><div class="nm" id="cnm"></div><small id="chl"></small></div>
+      <button class="btn iconbtn" id="spk" aria-label="sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
     </div>
   </div>
   <div class="wrap"><div class="homebar" id="homebar"></div></div></div>
   <div class="msgs"><div class="wrap" id="msgs"></div></div>
   <div class="composer"><div class="wrap">
     <div class="chips" id="chips"></div>
-    <form id="cf"><input id="ci" autocomplete="off" maxlength="300"><button class="btn gold" data-t="send">ابعت</button></form>
+    <form id="cf"><button type="button" class="btn iconbtn" id="mic" hidden aria-label="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><input id="ci" autocomplete="off" maxlength="300"><button class="btn gold" data-t="send">ابعت</button></form>
   </div></div>
 </div>
 
@@ -242,7 +268,7 @@ const I18N = {
     lgSite:"موقع اكتشاف",lgLoved:"فيه قطعة حبيتها",lgGem:"المتحف",tripH:"رحلتك من المتحف لبيوت القطع",
     tripSub:"القطع اللي قلتلها «عايز أزورك» هنا. اختار الأيام والإيقاع، وبيتي يرتّبلك الرحلة.",days:"أيام",pace:"الإيقاع",calm:"هادي",full:"مليان",make:"اعمل رحلتي",
     passH:"جواز سفر الأصول",passSub:"لما توصل لبيت قطعة فعلاً، افتح الموقع على الخريطة ودوس «أنا هنا» عشان تاخد الختم.",
-    foot:"بيتي · مشروع لهاكاثون المتحف المصري الكبير 2026 · بيانات تجريبية: 10 قطع من 5 مواقع، والمتحف يقدر يوصّله بقاعدة بياناته الكاملة.",
+    foot:(n,m)=>`بيتي · مشروع لهاكاثون المتحف المصري الكبير 2026 · القطع: ${n} · مواقع الاكتشاف: ${m}`,admin:"لوحة التحكم",mapOff:"الخريطة محتاجة نت عشان تتحمّل.",scanning:"بتعرّف على القطعة…",scanNo:"مش قادر أعرف القطعة دي. جرّب صورة أوضح للقطعة كلها، أو اكتب رقمها.",scanMaybe:"تقصد واحدة من دول؟",scanFail:"التعرّف بالكاميرا مش متاح دلوقتي.",micNo:"المتصفح ده مش بيدعم الكلام. جرّب Chrome.",listening:"بسمعك…",noVoice:"مفيش صوت عربي على الجهاز ده، فهيقرا بأقرب صوت متاح.",
     note:"المسافات بخط مستقيم وتقريبية، ومواعيد الزيارة لازم تتأكد منها قبل السفر.",send:"ابعت",tTalk:"كلّم قطعة",tMap:"الخريطة",tTrip:"رحلتي",
     ci:"اسأل القطعة أي حاجة…",aiOn:p=>`متصل بالذكاء الاصطناعي (${p})`,aiOff:"وضع أوفلاين: القطع بترد من معلومات جاهزة",
     km:"كم من المتحف",pcs:"قطع من هنا",region:"المنطقة",how:"توصل إزاي:",inMuseum:"في المتحف:",talk:"كلّمها",
@@ -268,7 +294,7 @@ const I18N = {
     lgSite:"Discovery site",lgLoved:"Has a piece you love",lgGem:"The museum",tripH:"Your trip from the museum to their homes",
     tripSub:"Pieces you told “I want to visit you” are here. Pick days and pace, and Beity plans the trip.",days:"Days",pace:"Pace",calm:"Calm",full:"Packed",make:"Plan my trip",
     passH:"Origins passport",passSub:"When you actually reach a piece's home, open it on the map and tap “I'm here” to collect the stamp.",
-    foot:"Beity · a GEM Hackathon 2026 project · Demo data: 10 pieces from 5 sites; the museum can connect its full database.",
+    foot:(n,m)=>`Beity · a GEM Hackathon 2026 project · ${n} pieces from ${m} discovery sites.`,admin:"Admin",mapOff:"The map needs an internet connection to load.",scanning:"Identifying the piece…",scanNo:"I couldn't identify that piece. Try a clearer photo of the whole piece, or type its number.",scanMaybe:"Did you mean one of these?",scanFail:"Camera identification isn't available right now.",micNo:"This browser doesn't support speech. Try Chrome.",listening:"Listening…",noVoice:"No Arabic voice on this device, so the closest available voice will read.",
     note:"Distances are straight-line estimates; confirm opening hours before you travel.",send:"Send",tTalk:"Talk",tMap:"Map",tTrip:"My trip",
     ci:"Ask the piece anything…",aiOn:p=>`AI connected (${p})`,aiOff:"Offline mode: pieces answer from prepared facts",
     km:"km from museum",pcs:"pieces from here",region:"Region",how:"Getting there:",inMuseum:"In the museum:",talk:"Talk to it",
@@ -294,18 +320,18 @@ const I18N = {
 const store={get(k,d){try{const v=localStorage.getItem("beity:"+k);return v==null?d:JSON.parse(v)}catch{return d}},
              set(k,v){try{localStorage.setItem("beity:"+k,JSON.stringify(v))}catch{}}};
 let LANG=store.get("lang","ar"), LOVED=new Set(store.get("loved",[])), STAMPS=new Set(store.get("stamps",[]));
-let DEMO=store.get("demo",false), MODE="offline", PROVIDER="", DATA=null, SEL=null, CUR=null;
+let DEMO=store.get("demo",false), SPEAK=store.get("speak",false), HEALTH={}, MODE="offline", PROVIDER="", DATA=null, SEL=null, CUR=null;
 const CHATS={};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const T=k=>I18N[LANG][k];
-const L=o=>o?.[LANG]??o?.ar??"";
+const tx=o=>o?.[LANG]||o?.ar||"";
 const site=id=>DATA.sites.find(s=>s.id===id), piece=id=>DATA.pieces.find(p=>p.id===id);
 function km(a,b){const R=6371,r=x=>x*Math.PI/180,dLa=r(b.lat-a.lat),dLo=r(b.lon-a.lon);
   const h=Math.sin(dLa/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)))}
 const num=n=>LANG==="ar"?Number(n).toLocaleString("ar-EG"):String(n);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),2600)}
-const initial=p=>L(p.name).replace(/^(ال)/,"").trim()[0]||"?";
+const initial=p=>tx(p.name).replace(/^(ال)/,"").trim()[0]||"?";
 
 /* ================= render: language & static text ================= */
 function applyLang(){
@@ -319,6 +345,8 @@ function applyLang(){
   renderAll();
 }
 function renderStatus(){$("#dot").classList.toggle("ok",MODE==="ai");$("#status").textContent=MODE==="ai"?T("aiOn")(PROVIDER):T("aiOff");
+  if(DATA)$("#foot").textContent=T("foot")(num(DATA.pieces.length),num(DATA.sites.length));
+  $("#scan").hidden=!HEALTH.vision; $("#mic").hidden=!SR; $("#spk").classList.toggle("on",SPEAK);
   $("#demo").textContent=DEMO?T("demoOn"):T("demoOff")}
 
 /* ================= pieces grid ================= */
@@ -327,61 +355,76 @@ function renderGrid(){
   const list=DATA.pieces.filter(p=>!q||p.code.includes(q)||p.name.ar.includes(q)||p.name.en.toLowerCase().includes(q));
   $("#grid").innerHTML=list.map(p=>`<button class="pc" data-open="${p.id}">
     <div style="display:flex;gap:10px;align-items:center"><div class="av">${esc(initial(p))}</div><div class="code">#${p.code}</div></div>
-    <div class="nm">${esc(L(p.name))}</div><div class="hl">${esc(L(p.hall))}</div>
-    <div class="row"><span>${esc(L(site(p.site).name))}</span>${LOVED.has(p.id)?'<span class="heart">♥</span>':""}</div></button>`).join("")
+    <div class="nm">${esc(tx(p.name))}</div><div class="hl">${esc(tx(p.hall))}</div>
+    <div class="row"><span>${esc(tx(site(p.site).name))}</span>${LOVED.has(p.id)?'<span class="heart">♥</span>':""}</div></button>`).join("")
     || `<div class="empty">${esc(T("unknown"))}</div>`;
 }
 
-/* ================= map ================= */
-const K=60, X=lon=>(lon-24.6)*0.88*K, Y=lat=>(32.4-lat)*K;
-const OUTLINE=[[25,31.6],[26.6,31.5],[27.3,31.35],[28.4,31.05],[29,30.85],[29.9,31.2],[30.4,31.45],[31,31.55],[31.6,31.45],[32.3,31.25],[33.2,31.1],[34.22,31.32],[34.9,29.5],[34.6,28.6],[34.27,27.75],[33.6,28.4],[32.9,29.4],[32.56,29.97],[32.35,29.6],[32.65,29.1],[33.1,28.35],[33.8,27.25],[34.28,26.1],[34.9,25.07],[35.47,23.95],[35.7,23.1],[36.6,22.2],[36.9,22],[25,22]];
-const NILE=[[[31.3,22],[31.6,22.4],[32.3,23],[32.9,24.09],[32.9,24.6],[32.64,25.69],[32.73,26.16],[32,26.5],[31.6,26.9],[31.18,27.18],[30.75,28.1],[30.95,28.6],[31.1,29.07],[31.23,30.05]],
-            [[31.23,30.05],[30.95,30.6],[30.6,31],[30.4,31.45]],[[31.23,30.05],[31.3,30.6],[31.6,31.1],[31.8,31.5]]];
-const OFFSET={giza:[-26,-10],memphis:[-12,26],tanis:[0,0],kv:[-20,-6],hettan:[20,8]};
-const pathOf=pts=>pts.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join("");
+/* ================= map (Leaflet + OpenStreetMap) ================= */
+let MAP=null, MLAYER=null, FITTED=false;
+function mapBounds(){return [[DATA.gem.lat,DATA.gem.lon],...DATA.sites.map(s=>[s.lat,s.lon])]}
 function renderMap(){
-  const g=DATA.gem, svg=$("#map");
-  const lovedSites=new Set([...LOVED].map(id=>piece(id)?.site));
-  const labels=LANG==="ar"?{med:"البحر المتوسط",red:"البحر الأحمر",cai:"القاهرة",alx:"الإسكندرية",asw:"أسوان",lux:"الأقصر",gem:"المتحف"}:{med:"Mediterranean Sea",red:"Red Sea",cai:"Cairo",alx:"Alexandria",asw:"Aswan",lux:"Luxor",gem:"GEM"};
-  let h=`<rect width="655" height="642" fill="#10151c"/>
-  <path d="${pathOf(OUTLINE)}Z" fill="#2a241d" stroke="#4a3f33" stroke-width="1.5"/>
-  ${NILE.map(n=>`<path d="${pathOf(n)}" fill="none" stroke="var(--nile)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`).join("")}
-  <text x="${X(27.2)}" y="${Y(31.95)}" fill="#5f87b8" font-size="16">${labels.med}</text>
-  <text x="${X(35.2)}" y="${Y(25.6)}" fill="#5f87b8" font-size="16" transform="rotate(58 ${X(35.2)} ${Y(25.6)})">${labels.red}</text>
-  ${[[31.4,30.15,labels.cai],[29.9,31.0,labels.alx],[33.1,24.0,labels.asw]].map(([lo,la,t])=>`<text x="${X(lo)}" y="${Y(la)}" fill="#8d7f6b" font-size="14">${t}</text>`).join("")}`;
-  DATA.sites.forEach(s=>{h+=`<line x1="${X(g.lon)}" y1="${Y(g.lat)}" x2="${X(s.lon)+OFFSET[s.id][0]}" y2="${Y(s.lat)+OFFSET[s.id][1]}" stroke="${lovedSites.has(s.id)?"#ff8f6b":"#e3aa4f"}" stroke-width="1.3" stroke-dasharray="4 4" opacity=".7"/>`});
-  h+=`<g style="pointer-events:none"><rect x="${X(g.lon)-6}" y="${Y(g.lat)-6}" width="12" height="12" fill="var(--text)" transform="rotate(45 ${X(g.lon)} ${Y(g.lat)})"/><text x="${X(g.lon)+12}" y="${Y(g.lat)+4}" fill="var(--text)" font-size="15" font-weight="800">${labels.gem}</text></g>`;
-  DATA.sites.forEach(s=>{const n=DATA.pieces.filter(p=>p.site===s.id).length, x=X(s.lon)+OFFSET[s.id][0], y=Y(s.lat)+OFFSET[s.id][1];
-    const anchorEnd=OFFSET[s.id][0]<0;
-    h+=`<g class="pin ${lovedSites.has(s.id)?"loved":""} ${SEL===s.id?"sel":""}" data-site="${s.id}" tabindex="0" role="button" aria-label="${esc(L(s.name))}: ${n}">
-      <circle class="halo" cx="${x}" cy="${y}" r="21"/><circle class="c" cx="${x}" cy="${y}" r="15"/>
-      <text x="${x}" y="${y+5}" text-anchor="middle">${num(n)}</text>
-      <text class="lbl" x="${x+(anchorEnd?-22:22)}" y="${y+6}" text-anchor="${anchorEnd?"end":"start"}">${esc(L(s.name).split(" (")[0])}</text></g>`});
-  svg.innerHTML=h;
+  const LF=window.L, el=$("#map");
+  if(!LF){el.innerHTML=`<div class="empty" style="margin:16px">${esc(T("mapOff"))}</div>`;return}
+  if(!MAP){
+    MAP=LF.map(el,{scrollWheelZoom:false}).setView([27.2,31.2],6);
+    LF.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:18,
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
+    MLAYER=LF.layerGroup().addTo(MAP);
+    MAP.on("zoomend",()=>renderMap());
+  }
+  MLAYER.clearLayers();
+  const g=DATA.gem, z=MAP.getZoom(), lovedSites=new Set([...LOVED].map(id=>piece(id)?.site));
+  const cnt=id=>DATA.pieces.filter(p=>p.site===id).length;
+  // 1) group sites whose dots would overlap at this zoom (tap a group to zoom in)
+  const groups=[];
+  DATA.sites.map(s=>({s,pt:MAP.project([s.lat,s.lon],z),n:cnt(s.id)})).sort((a,b)=>b.n-a.n).forEach(o=>{
+    const hitG=groups.find(gr=>gr.pt.distanceTo(o.pt)<30); if(hitG)hitG.m.push(o); else groups.push({pt:o.pt,m:[o]})});
+  groups.forEach(gr=>{gr.n=gr.m.reduce((t,o)=>t+o.n,0);const nm=tx(gr.m[0].s.name).split(" (")[0];gr.label=gr.m.length>1?`${nm} +${num(gr.m.length-1)}`:nm});
+  // 2) labels: right of the dot, else left, else hidden
+  const gemPt=MAP.project([g.lat,g.lon],z), gemNear=groups.some(gr=>gr.pt.distanceTo(gemPt)<24);
+  const items=[...groups.map((gr,i)=>({k:i,pt:gr.pt,label:gr.label,r:16})),...(gemNear?[]:[{k:"gem",pt:gemPt,label:T("lgGem"),r:9}])];
+  const boxes=items.map(it=>({x1:it.pt.x-it.r,x2:it.pt.x+it.r,y1:it.pt.y-it.r,y2:it.pt.y+it.r}));
+  const hit=bx=>boxes.some(o=>!(bx.x2<o.x1||bx.x1>o.x2||bx.y2<o.y1||bx.y1>o.y2)), side={};
+  items.forEach(it=>{const w=it.label.length*7.2+8,{x,y}=it.pt;
+    const R={x1:x+it.r+4,x2:x+it.r+4+w,y1:y-10,y2:y+10}, Lb={x1:x-it.r-4-w,x2:x-it.r-4,y1:y-10,y2:y+10};
+    if(!hit(R)){side[it.k]="";boxes.push(R)}else if(!hit(Lb)){side[it.k]="l";boxes.push(Lb)}else side[it.k]="nl"});
+  // 3) draw
+  DATA.sites.forEach(s=>LF.polyline([[g.lat,g.lon],[s.lat,s.lon]],{color:lovedSites.has(s.id)?"#ff8f6b":"#e3aa4f",weight:1.5,dashArray:"5 6",opacity:.7,interactive:false}).addTo(MLAYER));
+  if(!gemNear)LF.marker([g.lat,g.lon],{interactive:false,icon:LF.divIcon({className:"",iconSize:[30,30],iconAnchor:[15,15],
+    html:`<div class="mk gem ${side.gem}"><b></b><span>${esc(T("lgGem"))}</span></div>`})}).addTo(MLAYER);
+  groups.forEach((gr,i)=>{
+    const ids=gr.m.map(o=>o.s.id), first=gr.m[0].s, multi=ids.length>1;
+    const cls=[side[i],ids.some(id=>lovedSites.has(id))?"loved":"",ids.includes(SEL)?"sel":"",multi?"grp":""].join(" ");
+    const icon=LF.divIcon({className:"",iconSize:[30,30],iconAnchor:[15,15],html:`<div class="mk ${cls}"><b>${num(gr.n)}</b><span dir="auto">${esc(gr.label)}</span></div>`});
+    LF.marker([first.lat,first.lon],{icon,title:gr.m.map(o=>tx(o.s.name)).join(" · "),keyboard:true,riseOnHover:true,zIndexOffset:ids.includes(SEL)?1000:0})
+      .on("click",()=>multi?MAP.fitBounds(gr.m.map(o=>[o.s.lat,o.s.lon]),{padding:[70,70],maxZoom:13}):selectSite(first.id,true)).addTo(MLAYER);
+  });
 }
+function showMap(){if(!MAP)return;setTimeout(()=>{MAP.invalidateSize();if(!FITTED){MAP.fitBounds(mapBounds(),{padding:[40,40]});FITTED=true}},60)}
 function renderSite(){
   const box=$("#site"); if(!SEL){box.innerHTML="";return}
   const s=site(SEL), here=DATA.pieces.filter(p=>p.site===s.id), d=km(DATA.gem,s), got=STAMPS.has(s.id);
   box.innerHTML=`<article class="card">
-    <div class="meta">${s.lat.toFixed(3)}°N · ${s.lon.toFixed(3)}°E · ${esc(L(s.gov))}</div>
-    <h3>${esc(L(s.name))}</h3><p>${esc(L(s.story))}</p>
-    <div class="stats"><div><b>${num(d)}</b><span>${T("km")}</span></div><div><b>${num(here.length)}</b><span>${T("pcs")}</span></div><div><b>${esc(L(DATA.regions[s.region]))}</b><span>${T("region")}</span></div></div>
+    <div class="meta">${s.lat.toFixed(3)}°N · ${s.lon.toFixed(3)}°E · ${esc(tx(s.gov))}</div>
+    <h3>${esc(tx(s.name))}</h3><p>${esc(tx(s.story))}</p>
+    <div class="stats"><div><b>${num(d)}</b><span>${T("km")}</span></div><div><b>${num(here.length)}</b><span>${T("pcs")}</span></div><div><b>${esc(tx(DATA.regions[s.region]))}</b><span>${T("region")}</span></div></div>
     <div class="plist">${here.map(p=>`<div class="pitem"><div class="av" style="width:34px;height:34px">${esc(initial(p))}</div>
-      <div class="t"><div>${esc(L(p.name))}</div><small>${T("inMuseum")} ${esc(L(p.hall))}</small></div>
+      <div class="t"><div>${esc(tx(p.name))}</div><small>${T("inMuseum")} ${esc(tx(p.hall))}</small></div>
       <button class="btn" data-open="${p.id}">${T("talk")}</button>
       <button class="btn ${LOVED.has(p.id)?"on":""}" data-love="${p.id}" aria-label="love">${LOVED.has(p.id)?"♥":"♡"}</button></div>`).join("")}</div>
-    <p><b>${T("how")}</b> ${esc(L(s.how))}</p>
+    <p><b>${T("how")}</b> ${esc(tx(s.how))}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn ${got?"":"gold"}" data-stamp="${s.id}" ${got?"disabled":""}>${got?T("stamped"):T("stampHere")}</button>
       ${DEMO&&!got?`<button class="btn" data-sim="${s.id}">${T("simulate")}</button>`:""}
     </div></article>`;
 }
-function selectSite(id,scroll){SEL=id;renderMap();renderSite();if(scroll)$("#site").scrollIntoView({behavior:"smooth",block:"start"})}
+function selectSite(id,scroll){SEL=id;renderMap();renderSite();const st=site(id);if(MAP&&st)MAP.panTo([st.lat,st.lon]);if(scroll)$("#site").scrollIntoView({behavior:"smooth",block:"start"})}
 
 /* ================= love / stamps ================= */
-function toggleLove(id){const p=piece(id);if(LOVED.has(id)){LOVED.delete(id);toast(T("removed")(L(p.name)))}else{LOVED.add(id);toast(T("added")(L(p.name)))}
+function toggleLove(id){const p=piece(id);if(LOVED.has(id)){LOVED.delete(id);toast(T("removed")(tx(p.name)))}else{LOVED.add(id);toast(T("added")(tx(p.name)))}
   store.set("loved",[...LOVED]);renderAll();if(CUR===id)renderHomebar()}
-function giveStamp(id){STAMPS.add(id);store.set("stamps",[...STAMPS]);toast(T("gotStamp")(L(site(id).name)));renderAll()}
+function giveStamp(id){STAMPS.add(id);store.set("stamps",[...STAMPS]);toast(T("gotStamp")(tx(site(id).name)));renderAll()}
 function checkIn(id){
   if(!navigator.geolocation){toast(T("noGeo"));return}
   navigator.geolocation.getCurrentPosition(pos=>{const d=km({lat:pos.coords.latitude,lon:pos.coords.longitude},site(id));
@@ -389,32 +432,32 @@ function checkIn(id){
 }
 function renderPassport(){
   const n=DATA.sites.filter(s=>STAMPS.has(s.id)).length;
-  $("#passport").innerHTML=DATA.sites.map(s=>`<div class="stamp ${STAMPS.has(s.id)?"got":""}"><div><b>${esc(L(s.name).split(" (")[0])}</b>${STAMPS.has(s.id)?"✓":esc(L(s.gov).split(" ·")[0])}</div></div>`).join("")
+  $("#passport").innerHTML=DATA.sites.map(s=>`<div class="stamp ${STAMPS.has(s.id)?"got":""}"><div><b>${esc(tx(s.name).split(" (")[0])}</b>${STAMPS.has(s.id)?"✓":esc(tx(s.gov).split(" ·")[0])}</div></div>`).join("")
     +`<div class="stamp" style="border-style:solid"><div><b style="font-size:20px;color:var(--gold)">${num(n)}/${num(DATA.sites.length)}</b>${T("stampOf")(num(n),num(DATA.sites.length))}</div></div>`;
 }
 
 /* ================= chat ================= */
 function openChat(id){
   const p=piece(id); if(!p)return; CUR=id;
-  $("#cav").textContent=initial(p); $("#cnm").textContent=L(p.name); $("#chl").textContent=`#${p.code} · ${L(p.hall)}`;
+  $("#cav").textContent=initial(p); $("#cnm").textContent=tx(p.name); $("#chl").textContent=`#${p.code} · ${tx(p.hall)}`;
   renderHomebar();
-  if(!CHATS[id]){CHATS[id]=[{role:"assistant",text:L(p.facts.intro)}]}
+  if(!CHATS[id]){CHATS[id]=[{role:"assistant",text:tx(p.facts.intro)}];speak(tx(p.facts.intro))}
   renderMsgs(); renderChips();
   $("#chat").classList.add("open"); document.body.style.overflow="hidden";
   try{history.replaceState(null,"","#piece="+id)}catch{}
 }
-function closeChat(){CUR=null;$("#chat").classList.remove("open");document.body.style.overflow="";try{history.replaceState(null,"",location.pathname)}catch{}}
+function closeChat(){CUR=null;try{speechSynthesis.cancel()}catch{}if(REC)REC.stop();$("#chat").classList.remove("open");document.body.style.overflow="";try{history.replaceState(null,"",location.pathname)}catch{}}
 function renderHomebar(){
   const p=piece(CUR), s=site(p.site), on=LOVED.has(p.id);
-  $("#homebar").innerHTML=`<div class="h">⌂ ${T("myHome")} <b>${esc(L(s.name))}</b> · ${num(km(DATA.gem,s))} ${LANG==="ar"?"كم":"km"}</div>
+  $("#homebar").innerHTML=`<div class="h">⌂ ${T("myHome")} <b>${esc(tx(s.name))}</b> · ${num(km(DATA.gem,s))} ${LANG==="ar"?"كم":"km"}</div>
     <button class="btn" data-gomap="${s.id}">${T("seeMap")}</button>
     <button class="btn ${on?"on":"gold"}" data-love="${p.id}">${on?T("wanted"):T("want")}</button>`;
 }
 function renderMsgs(){
   const p=piece(CUR), s=site(p.site);
-  $("#msgs").innerHTML=CHATS[CUR].map(m=>m.invite
-    ?`<div class="invite">${T("invite")(esc(L(s.name)),num(km(DATA.gem,s)))}<div class="acts"><button class="btn gold" data-love="${p.id}">${LOVED.has(p.id)?T("wanted"):T("want")}</button><button class="btn" data-gomap="${s.id}">${T("seeMap")}</button></div></div>`
-    :`<div class="msg ${m.role==="user"?"u":"a"} ${m.typing?"typing":""}">${esc(m.text)}</div>`).join("");
+  $("#msgs").innerHTML=CHATS[CUR].map((m,i)=>m.invite
+    ?`<div class="invite">${T("invite")(esc(tx(s.name)),num(km(DATA.gem,s)))}<div class="acts"><button class="btn gold" data-love="${p.id}">${LOVED.has(p.id)?T("wanted"):T("want")}</button><button class="btn" data-gomap="${s.id}">${T("seeMap")}</button></div></div>`
+    :`<div class="msg ${m.role==="user"?"u":"a"} ${m.typing?"typing":""}">${esc(m.text)}${m.role==="assistant"&&!m.typing&&("speechSynthesis" in window)?`<button class="say" data-say="${i}">▶ ${LANG==="ar"?"اسمع":"Listen"}</button>`:""}</div>`).join("");
   const box=$(".msgs"); box.scrollTop=box.scrollHeight;
 }
 function renderChips(){$("#chips").innerHTML=T("chips").map(([k,t])=>`<button data-ask="${k}">${esc(t)}</button>`).join("")}
@@ -425,8 +468,8 @@ const INTENTS=[["visit",/(أزور|ازور|زيار|اروح|أروح|visit|go 
 function offlineReply(id,text,intent){
   const p=piece(id), s=site(p.site);
   intent=intent||(INTENTS.find(([,re])=>re.test(text))||[])[0];
-  if(intent==="visit")return{text:T("visitAns")(L(s.name),L(s.how)),invite:true};
-  if(intent)return{text:L(p.facts[intent]),invite:intent==="home"};
+  if(intent==="visit")return{text:T("visitAns")(tx(s.name),tx(s.how)),invite:true};
+  if(intent)return{text:tx(p.facts[intent]),invite:intent==="home"};
   return{text:T("dontKnow"),invite:false};
 }
 async function ask(text,intent){
@@ -441,15 +484,64 @@ async function ask(text,intent){
   }
   if(!out){await new Promise(r=>setTimeout(r,450));out=offlineReply(id,text,intent)}
   CHATS[id]=CHATS[id].filter(m=>!m.typing);
-  CHATS[id].push({role:"assistant",text:out.text});
+  CHATS[id].push({role:"assistant",text:out.text}); speak(out.text);
   if(out.invite&&!CHATS[id].some(m=>m.invite))CHATS[id].push({invite:true});
   if(CUR===id)renderMsgs();
+}
+
+
+/* ================= voice ================= */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let REC=null;
+function speak(text){
+  if(!SPEAK||!("speechSynthesis" in window)||!text)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text), want=LANG==="ar"?"ar":"en";
+  u.lang=LANG==="ar"?"ar-EG":"en-US";
+  const vs=speechSynthesis.getVoices(), v=vs.find(v=>v.lang==="ar-EG")||vs.find(v=>v.lang.startsWith(want));
+  if(v)u.voice=v; else if(LANG==="ar"&&vs.length&&!speak.warned){speak.warned=true;toast(T("noVoice"))}
+  u.rate=.95; speechSynthesis.speak(u);
+}
+function listen(){
+  if(!SR){toast(T("micNo"));return}
+  if(REC){REC.stop();return}
+  REC=new SR(); REC.lang=LANG==="ar"?"ar-EG":"en-US"; REC.interimResults=true; REC.maxAlternatives=1;
+  const ci=$("#ci"); ci.value=""; ci.placeholder=T("listening"); $("#mic").classList.add("on");
+  REC.onresult=e=>{ci.value=[...e.results].map(r=>r[0].transcript).join("")};
+  REC.onerror=()=>{};
+  REC.onend=()=>{REC=null;$("#mic").classList.remove("on");ci.placeholder=T("ci");const v=ci.value.trim();if(v){ci.value="";ask(v)}};
+  try{speechSynthesis.cancel()}catch{}
+  REC.start();
+}
+
+/* ================= camera identification ================= */
+async function shrink(file){
+  const img=await createImageBitmap(file); const k=Math.min(1,1280/Math.max(img.width,img.height));
+  const c=document.createElement("canvas"); c.width=Math.round(img.width*k); c.height=Math.round(img.height*k);
+  c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+  return await new Promise(r=>c.toBlob(r,"image/jpeg",.85));
+}
+async function identify(file){
+  const ov=document.createElement("div"); ov.className="scanning"; ov.textContent=T("scanning"); document.body.appendChild(ov);
+  try{
+    const fd=new FormData(); fd.append("image",await shrink(file),"photo.jpg"); fd.append("language",LANG);
+    const r=await fetch("/api/identify",{method:"POST",body:fd});
+    if(!r.ok)throw 0;
+    const j=await r.json(); ov.remove();
+    if(j.id&&j.confidence>=.45){openChat(j.id);return}
+    const opts=[j.id,...(j.candidates||[])].filter(Boolean).map(piece).filter(Boolean);
+    if(!opts.length){toast(T("scanNo"));return}
+    const sh=document.createElement("div"); sh.className="sheet";
+    sh.innerHTML=`<h4>${esc(T("scanMaybe"))}</h4><div class="plist">${opts.map(p=>`<div class="pitem"><div class="av" style="width:34px;height:34px">${esc(initial(p))}</div><div class="t"><div>${esc(tx(p.name))}</div><small>#${esc(p.code)} · ${esc(tx(p.hall))}</small></div><button class="btn gold" data-open="${p.id}">${T("talk")}</button></div>`).join("")}</div><button class="btn big" data-close-sheet>✕</button>`;
+    sh.addEventListener("click",e=>{if(e.target.closest("[data-open],[data-close-sheet]"))sh.remove()});
+    document.body.appendChild(sh);
+  }catch{ov.remove();toast(T("scanFail"))}
 }
 
 /* ================= trip planning ================= */
 function renderLoved(){
   const l=[...LOVED].map(piece).filter(Boolean);
-  $("#loved").innerHTML=l.length?l.map(p=>`<span class="tag">${esc(L(p.name))}<button data-love="${p.id}" aria-label="remove">×</button></span>`).join(""):`<div class="empty">${esc(T("noLoved"))}</div>`;
+  $("#loved").innerHTML=l.length?l.map(p=>`<span class="tag">${esc(tx(p.name))}<button data-love="${p.id}" aria-label="remove">×</button></span>`).join(""):`<div class="empty">${esc(T("noLoved"))}</div>`;
   $("#mk").disabled=!l.length;
   const b=$("#badge"); b.hidden=!l.length; b.textContent=num(l.length);
 }
@@ -461,10 +553,10 @@ function offlinePlan(days,pace){
   const cap=pace==="full"?1.5:1, out=[];
   for(const r of regions){
     const list=byRegion[r].sort((a,b)=>km(DATA.gem,a)-km(DATA.gem,b));
-    if(r==="luxor"&&days-out.length>=2)out.push({title:`${T("travel")}: ${L(DATA.regions.luxor)}`,stops:[],tip:T("luxorTravel")});
+    if(r==="luxor"&&days-out.length>=2)out.push({title:`${T("travel")}: ${tx(DATA.regions.luxor)}`,stops:[],tip:T("luxorTravel")});
     let cur=null,load=0;
-    for(const s of list){if(!cur||load+s.visit>cap){cur={title:L(DATA.regions[r]),stops:[],tip:r==="luxor"?T("flyTip"):""};out.push(cur);load=0}
-      cur.stops.push({site:s.id,note:L(s.how)});load+=s.visit}
+    for(const s of list){if(!cur||load+s.visit>cap){cur={title:tx(DATA.regions[r]),stops:[],tip:r==="luxor"?T("flyTip"):""};out.push(cur);load=0}
+      cur.stops.push({site:s.id,note:tx(s.how)});load+=s.visit}
   }
   let warning="";
   if(out.length>days){warning=T("short");out.length=days}
@@ -479,8 +571,8 @@ function showPlan(plan,source){
   $("#plan").innerHTML=`<p class="sub" style="margin-top:14px">${esc(T("planBy")[source])}${plan.title?" · "+esc(plan.title):""}</p>`
    +(plan.warning?`<div class="warn">${esc(plan.warning)}</div>`:"")
    +plan.days.map((d,i)=>`<div class="day"><h4>${T("dayN")(num(i+1))}${d.title?" · "+esc(d.title):""}</h4>
-     ${d.stops.map(st=>{const s=site(st.site);const ps=loved.filter(p=>p.site===st.site).map(p=>L(p.name)).join("، ");
-       return`<div class="stop"><b>${esc(L(s.name))}</b><small>${ps?"♥ "+esc(ps)+"<br>":""}${esc(st.note||"")}</small></div>`}).join("")}
+     ${d.stops.map(st=>{const s=site(st.site);const ps=loved.filter(p=>p.site===st.site).map(p=>tx(p.name)).join("، ");
+       return`<div class="stop"><b>${esc(tx(s.name))}</b><small>${ps?"♥ "+esc(ps)+"<br>":""}${esc(st.note||"")}</small></div>`}).join("")}
      ${d.tip?`<div class="tip">💡 ${esc(d.tip)}</div>`:""}
      ${d.stops.length?`<a class="btn" style="display:inline-block;margin-top:10px;text-decoration:none" target="_blank" rel="noopener" href="${mapsLink(d.stops)}">${T("openMaps")}</a>`:""}</div>`).join("");
 }
@@ -496,21 +588,22 @@ async function makePlan(){
 }
 
 /* ================= nav & events ================= */
-function go(v){$$(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));$$("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));window.scrollTo({top:0})}
+function go(v){$$(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));$$("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));window.scrollTo({top:0});if(v==="map")showMap()}
 function renderAll(){renderStatus();renderGrid();renderMap();renderSite();renderLoved();renderPassport();if(CUR){renderHomebar();renderMsgs();renderChips()}}
 
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-open],[data-love],[data-site],[data-stamp],[data-sim],[data-gomap],[data-ask],[data-v],[data-lang]");if(!t)return;
+  const t=e.target.closest("[data-open],[data-love],[data-site],[data-stamp],[data-sim],[data-gomap],[data-ask],[data-v],[data-lang],[data-say]");if(!t)return;
   const d=t.dataset;
   if(d.open)openChat(d.open);
   else if(d.love)toggleLove(d.love);
   else if(d.site)selectSite(d.site,true);
   else if(d.stamp)checkIn(d.stamp);
   else if(d.sim)giveStamp(d.sim);
-  else if(d.gomap){closeChat();go("map");selectSite(d.gomap,true)}
+  else if(d.gomap){closeChat();go("map");setTimeout(()=>selectSite(d.gomap,true),120)}
   else if(d.ask){const c=T("chips").find(([k])=>k===d.ask);ask(c[1],d.ask)}
   else if(d.v)go(d.v);
   else if(d.lang){LANG=d.lang;store.set("lang",LANG);applyLang()}
+  else if(d.say!=null){const m=CHATS[CUR]?.[+d.say];if(m){const was=SPEAK;SPEAK=true;speak(m.text);SPEAK=was}}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CUR)closeChat();const p=e.target.closest?.(".pin");if(p&&(e.key==="Enter"||e.key===" ")){e.preventDefault();selectSite(p.dataset.site,true)}});
 $("#back").onclick=closeChat;
@@ -518,16 +611,22 @@ $("#cf").onsubmit=e=>{e.preventDefault();const v=$("#ci").value;$("#ci").value="
 $("#q").oninput=renderGrid;
 $("#q").onkeydown=e=>{if(e.key==="Enter"){const q=e.target.value.trim();const p=DATA.pieces.find(p=>p.code===q)||DATA.pieces.find(p=>p.name.ar.includes(q)||p.name.en.toLowerCase().includes(q.toLowerCase()));if(q&&p)openChat(p.id);else if(q)toast(T("unknown"))}};
 $("#mk").onclick=makePlan;
+$("#mic").onclick=listen;
+$("#spk").onclick=()=>{SPEAK=!SPEAK;store.set("speak",SPEAK);if(!SPEAK)try{speechSynthesis.cancel()}catch{};renderStatus()};
+$("#scan").onclick=()=>$("#scanf").click();
+$("#scanf").onchange=e=>{const f=e.target.files[0];e.target.value="";if(f)identify(f)};
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1).replace("piece=","");if(h&&piece(h)&&CUR!==h)openChat(h)});
 $("#demo").onclick=()=>{DEMO=!DEMO;store.set("demo",DEMO);renderAll()};
 
 /* ================= boot ================= */
 (async()=>{
-  DATA=await (await fetch("data.json")).json();
+  try{const r=await fetch("/api/data");if(!r.ok)throw 0;DATA=await r.json()}catch{DATA=await (await fetch("data.json")).json()}
   if(/demo/.test(location.search)){DEMO=true;store.set("demo",true)}
   applyLang();
-  try{const r=await fetch("/api/health");if(r.ok){const j=await r.json();PROVIDER=j.provider;if(j.provider&&j.provider!=="offline")MODE="ai"}}catch{}
+  try{const r=await fetch("/api/health");if(r.ok){HEALTH=await r.json();PROVIDER=HEALTH.provider;if(PROVIDER&&PROVIDER!=="offline")MODE="ai"}}catch{}
   renderStatus();
-  const m=location.hash.match(/piece=(\w+)/);if(m&&piece(m[1]))openChat(m[1]);   // QR next to each piece → /#piece=mask
+  const h=location.hash.slice(1).replace("piece=","");if(h&&piece(h))openChat(h);   // QR next to each piece → /#mask
+  if("speechSynthesis" in window)speechSynthesis.getVoices();
   if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
 </script>

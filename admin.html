@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>بيتي · لوحة التحكم</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{--bg:#14110e;--panel:#1d1915;--panel2:#262019;--line:#3a3128;--text:#f3ead9;--muted:#b5a68e;--gold:#e3aa4f;--gold2:#f6cf86;--ok:#6cc58a;--danger:#e07a5f;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header{border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:12px;min-height:60px;flex-wrap:wrap}
+.logo{font-size:22px;font-weight:800;color:var(--gold)}
+.logo small{font-size:13px;color:var(--muted);font-weight:600;margin-inline-start:6px}
+.sp{flex:1}
+.pill{font-size:12px;border-radius:999px;padding:3px 10px;border:1px solid var(--line);color:var(--muted)}
+.pill.ok{border-color:var(--ok);color:var(--ok)}
+.pill.warn{border-color:var(--danger);color:#ffb9a5}
+.btn{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:8px 14px;font-size:14px;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--gold)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1b140a;font-weight:700}
+.btn.danger{border-color:var(--danger);color:#ffb9a5}
+.btn:disabled{opacity:.5}
+.tabs{display:flex;gap:6px;margin:18px 0;flex-wrap:wrap}
+.tabs button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 16px}
+.tabs button.on{background:var(--gold);color:#1b140a;border-color:var(--gold);font-weight:700}
+.bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.bar input{flex:1;min-width:180px}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{min-height:64px;resize:vertical;line-height:1.7}
+input[dir=ltr],textarea[dir=ltr]{text-align:left}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:start;font-size:14px;vertical-align:middle}
+th{color:var(--muted);font-weight:600;font-size:12px}
+tr:last-child td{border-bottom:0}
+td .acts{display:flex;gap:6px;justify-content:flex-end}
+.tbl{overflow-x:auto}
+.code{color:var(--gold);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:0;width:min(860px,96vw);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dh{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:2}
+.dh h3{margin:0;font-size:18px;flex:1}
+.db{padding:16px 18px;display:grid;gap:14px}
+.df{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;position:sticky;bottom:0;background:var(--panel)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:620px){.row,.row3{grid-template-columns:1fr}}
+label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px}
+legend{color:var(--gold2);padding:0 6px;font-size:14px}
+.err{background:#3a2216;border:1px solid var(--danger);color:#ffc8b6;border-radius:10px;padding:10px 12px;font-size:14px;white-space:pre-wrap}
+#pick{height:260px;border-radius:12px;direction:ltr}
+.login{max-width:380px;margin:12vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;gap:14px}
+.login h1{margin:0;font-size:22px}
+.qrgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.qr{background:#fff;color:#14110e;border-radius:12px;padding:14px;text-align:center;break-inside:avoid}
+.qr img{width:150px;height:150px}
+.qr b{display:block;font-size:15px;line-height:1.4}
+.qr small{display:block;color:#555}
+.qr .c{font-weight:800;font-size:20px;margin-top:4px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:#1b140a;padding:10px 16px;border-radius:12px;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+#toast.show{opacity:1}
+[hidden]{display:none!important}
+@media print{header,.tabs,.bar,.noprint{display:none!important}body{background:#fff}.qrgrid{grid-template-columns:repeat(3,1fr)}.qr{border:1px dashed #999}}
+</style>
+</head>
+<body>
+<div id="loginView" class="wrap" hidden>
+  <form class="login" id="loginForm">
+    <h1>بيتي · لوحة التحكم</h1>
+    <label>كلمة السر<input type="password" id="pw" autocomplete="current-password" required></label>
+    <div class="err" id="loginErr" hidden></div>
+    <button class="btn gold">دخول</button>
+    <a href="/" class="muted" style="font-size:13px">← رجوع للتطبيق</a>
+  </form>
+</div>
+
+<div id="app" hidden>
+<header><div class="wrap">
+  <div class="logo">بيتي<small>لوحة التحكم</small></div>
+  <span class="pill" id="store"></span>
+  <span class="sp"></span>
+  <a class="btn" href="/" target="_blank" rel="noopener">افتح التطبيق</a>
+  <button class="btn" id="logout">خروج</button>
+</div></header>
+<main class="wrap">
+  <div class="tabs" role="tablist">
+    <button data-tab="pieces" class="on">القطع <span id="nP"></span></button>
+    <button data-tab="sites">المواقع <span id="nS"></span></button>
+    <button data-tab="regions">المناطق</button>
+    <button data-tab="qr">QR للطباعة</button>
+  </div>
+
+  <section data-pane="pieces">
+    <div class="bar"><input id="qP" placeholder="دوّر بالاسم أو الرقم"><button class="btn gold" id="addP">+ قطعة جديدة</button></div>
+    <div class="tbl"><table><thead><tr><th>رقم</th><th>القطعة</th><th>بيتها</th><th>في المتحف</th><th></th></tr></thead><tbody id="tP"></tbody></table></div>
+  </section>
+
+  <section data-pane="sites" hidden>
+    <div class="bar"><span class="sp"></span><button class="btn gold" id="addS">+ موقع جديد</button></div>
+    <div class="tbl"><table><thead><tr><th>الموقع</th><th>المحافظة</th><th>المنطقة</th><th>قطع</th><th></th></tr></thead><tbody id="tS"></tbody></table></div>
+  </section>
+
+  <section data-pane="regions" hidden>
+    <p class="muted">المناطق بتستخدم عشان الرحلة تجمع المواقع القريبة من بعض في نفس اليوم.</p>
+    <div class="tbl"><table><thead><tr><th>id</th><th>عربي</th><th>English</th><th></th></tr></thead><tbody id="tR"></tbody>
+      <tfoot><tr><td><input id="rId" dir="ltr" placeholder="aswan"></td><td><input id="rAr" placeholder="أسوان"></td><td><input id="rEn" dir="ltr" placeholder="Aswan"></td><td><button class="btn gold" id="addR">إضافة</button></td></tr></tfoot></table></div>
+  </section>
+
+  <section data-pane="qr" hidden>
+    <div class="bar"><span class="muted">اطبع الكروت دي وحطها جنب كل قطعة. مسح الكود بيفتح الشات مع القطعة على طول.</span><span class="sp"></span><button class="btn gold" onclick="print()">اطبع</button></div>
+    <div class="qrgrid" id="qrs"></div>
+  </section>
+</main>
+</div>
+
+<dialog id="dlg"><form method="dialog" id="form" novalidate>
+  <div class="dh"><h3 id="dTitle"></h3><button class="btn" value="cancel" formnovalidate>✕</button></div>
+  <div class="db" id="dBody"></div>
+  <div class="df"><button class="btn gold" id="save" value="save">حفظ</button><button class="btn" value="cancel" formnovalidate>إلغاء</button><span class="sp"></span><span class="err" id="dErr" hidden></span></div>
+</form></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ss={get(k){try{return sessionStorage.getItem(k)}catch{return null}},set(k,v){try{v==null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v)}catch{}}};
+let TOKEN=ss.get("beity-admin"), DATA=null, EDIT=null, PICK=null;
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),2400)}
+const FACTS=[["intro","انت مين؟ (أول رسالة)"],["home","بيتك فين؟"],["found","مين لقاك؟"],["journey","وصلت للمتحف إزاي؟"],["made","معمول من إيه؟"]];
+
+async function api(method,url,body){
+  const r=await fetch(url,{method,headers:{"Content-Type":"application/json",Authorization:"Bearer "+TOKEN},body:body?JSON.stringify(body):undefined});
+  if(r.status===401){logout();throw new Error("انتهت الجلسة، ادخل تاني.")}
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){
+    const d=j.detail;
+    throw new Error(Array.isArray(d)?d.map(x=>`${(x.loc||[]).slice(1).join(" › ")}: ${x.msg}`).join("\n"):(d||"حصل خطأ"));
+  }
+  return j;
+}
+async function load(){DATA=await (await fetch("/api/data",{cache:"no-store"})).json();render()}
+
+/* ---------- auth ---------- */
+async function start(){
+  const h=await (await fetch("/api/health")).json().catch(()=>({}));
+  if(!h.admin){$("#loginView").hidden=false;$("#loginForm").innerHTML=`<h1>لوحة التحكم مقفولة</h1><p class="muted">ضيف متغير <b dir="ltr">ADMIN_PASSWORD</b> في إعدادات السيرفر (ملف .env أو Environment في Render) وأعد التشغيل.</p><a href="/" class="btn">رجوع للتطبيق</a>`;return}
+  if(TOKEN){try{const c=await api("GET","/api/admin/check");return enter(c)}catch{}}
+  $("#loginView").hidden=false;$("#pw").focus();
+}
+$("#loginForm").onsubmit=async e=>{
+  e.preventDefault();$("#loginErr").hidden=true;
+  const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:$("#pw").value})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){$("#loginErr").textContent=r.status===429?"محاولات كتير. استنى دقيقة.":"كلمة السر غلط.";$("#loginErr").hidden=false;return}
+  TOKEN=j.token;ss.set("beity-admin",TOKEN);$("#pw").value="";
+  enter(await api("GET","/api/admin/check"));
+};
+function enter(c){
+  $("#loginView").hidden=true;$("#app").hidden=false;
+  const st=$("#store");
+  if(c.storage==="github"){st.textContent=c.storage_error?"GitHub: "+c.storage_error:"الحفظ: GitHub ✓";st.className="pill "+(c.storage_error?"warn":"ok")}
+  else{st.textContent="الحفظ محلي: على Render التعديلات بتتمسح مع إعادة التشغيل";st.className="pill warn"}
+  load();
+}
+function logout(){TOKEN=null;ss.set("beity-admin",null);$("#app").hidden=true;$("#loginView").hidden=false}
+$("#logout").onclick=logout;
+
+/* ---------- tabs ---------- */
+$$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));$$("[data-pane]").forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)});
+
+/* ---------- render ---------- */
+const siteName=id=>DATA.sites.find(s=>s.id===id)?.name.ar||id;
+function render(){
+  $("#nP").textContent=`(${DATA.pieces.length})`;$("#nS").textContent=`(${DATA.sites.length})`;
+  const q=$("#qP").value.trim().toLowerCase();
+  $("#tP").innerHTML=DATA.pieces.filter(p=>!q||p.code.includes(q)||p.name.ar.includes(q)||p.name.en.toLowerCase().includes(q)||p.id.includes(q))
+    .map(p=>`<tr><td class="code">${esc(p.code)}</td><td><b>${esc(p.name.ar)}</b><br><small class="muted" dir="ltr">${esc(p.name.en)}</small></td><td>${esc(siteName(p.site))}</td><td>${esc(p.hall.ar)}</td>
+    <td><div class="acts"><a class="btn" href="/#${p.id}" target="_blank" rel="noopener">جرّب</a><button class="btn" data-ep="${p.id}">تعديل</button><button class="btn danger" data-dp="${p.id}">مسح</button></div></td></tr>`).join("")||`<tr><td colspan="5" class="muted">مفيش قطع.</td></tr>`;
+  $("#tS").innerHTML=DATA.sites.map(s=>`<tr><td><b>${esc(s.name.ar)}</b><br><small class="muted" dir="ltr">${esc(s.name.en)} · ${s.lat.toFixed(3)}, ${s.lon.toFixed(3)}</small></td><td>${esc(s.gov.ar)}</td><td>${esc(DATA.regions[s.region]?.ar||s.region)}</td><td>${DATA.pieces.filter(p=>p.site===s.id).length}</td>
+    <td><div class="acts"><button class="btn" data-es="${s.id}">تعديل</button><button class="btn danger" data-ds="${s.id}">مسح</button></div></td></tr>`).join("");
+  $("#tR").innerHTML=Object.entries(DATA.regions).map(([id,r])=>`<tr><td dir="ltr">${esc(id)}</td><td><input data-rar="${id}" value="${esc(r.ar)}"></td><td><input data-ren="${id}" dir="ltr" value="${esc(r.en)}"></td>
+    <td><div class="acts"><button class="btn" data-sr="${id}">حفظ</button><button class="btn danger" data-dr="${id}">مسح</button></div></td></tr>`).join("");
+  $("#qrs").innerHTML=DATA.pieces.map(p=>`<div class="qr"><img src="/api/qr/${p.id}.svg" alt="QR ${esc(p.code)}" loading="lazy"><div class="c">#${esc(p.code)}</div><b>${esc(p.name.ar)}</b><small dir="ltr">${esc(p.name.en)}</small><small>امسح الكود واتكلم معايا</small></div>`).join("");
+}
+$("#qP").oninput=render;
+
+/* ---------- forms ---------- */
+const slug=t=>t.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+const pair=(key,label,val,ta)=>`<div class="row"><label>${label} (عربي)${ta?`<textarea name="${key}.ar" required>${esc(val?.ar)}</textarea>`:`<input name="${key}.ar" value="${esc(val?.ar)}" required>`}</label>
+  <label>${label} (English)${ta?`<textarea name="${key}.en" dir="ltr">${esc(val?.en)}</textarea>`:`<input name="${key}.en" dir="ltr" value="${esc(val?.en)}">`}</label></div>`;
+function openDialog(title,html,onSave){
+  $("#dTitle").textContent=title;$("#dBody").innerHTML=html;$("#dErr").hidden=true;EDIT=onSave;$("#dlg").showModal();
+}
+function readForm(){const o={};new FormData($("#form")).forEach((v,k)=>{const [a,b]=k.split(".");if(b){(o[a]??={})[b]=String(v).trim()}else o[a]=String(v).trim()});return o}
+$("#form").addEventListener("submit",async e=>{
+  if(e.submitter?.value!=="save")return;
+  e.preventDefault();$("#dErr").hidden=true;$("#save").disabled=true;
+  try{await EDIT(readForm());$("#dlg").close();toast("اتحفظ ✓");await load()}
+  catch(err){$("#dErr").textContent=err.message;$("#dErr").hidden=false}
+  finally{$("#save").disabled=false}
+});
+
+function pieceForm(p){
+  const isNew=!p; p=p||{facts:{},sources:[]};
+  const halls=[...new Set(DATA.pieces.map(x=>x.hall.ar))];
+  openDialog(isNew?"قطعة جديدة":"تعديل: "+p.name.ar,`
+    <div class="row3"><label>رقم القطعة (اللي على اللوحة)<input name="code" dir="ltr" value="${esc(p.code)}" required pattern="[A-Za-z0-9-]{1,12}"></label>
+      <label>id (حروف إنجليزي صغيرة)<input name="id" dir="ltr" value="${esc(p.id)}" ${isNew?"":"readonly"} required placeholder="golden-mask"></label>
+      <label>بيتها (موقع الاكتشاف)<select name="site" required>${DATA.sites.map(s=>`<option value="${s.id}" ${s.id===p.site?"selected":""}>${esc(s.name.ar)}</option>`).join("")}</select></label></div>
+    ${pair("name","الاسم",p.name)}
+    ${pair("hall","مكانها في المتحف",p.hall)}
+    <datalist id="halls">${halls.map(h=>`<option value="${esc(h)}">`).join("")}</datalist>
+    <fieldset><legend>القطعة بتحكي عن نفسها (بصيغة المتكلم)</legend>
+      <p class="muted" style="margin:0;font-size:13px">الذكاء الاصطناعي بيرد من المعلومات دي بس، فاكتبها صح ومن مصدر موثوق.</p>
+      ${FACTS.map(([k,l])=>pair("facts_"+k,l,p.facts[k],true)).join("")}</fieldset>
+    <label>المصادر (لينك في كل سطر)<textarea name="sources" dir="ltr">${esc((p.sources||[]).join("\n"))}</textarea></label>`,
+  async f=>{
+    const body={id:f.id||slug(f.name?.en||"")||"",code:f.code,site:f.site,name:f.name,hall:f.hall,
+      facts:Object.fromEntries(FACTS.map(([k])=>[k,f["facts_"+k]])),sources:(f.sources||"").split(/\s+/).filter(Boolean)};
+    if(!body.id)throw new Error("اكتب id للقطعة (حروف إنجليزي صغيرة وأرقام وشَرطة).");
+    if(isNew&&DATA.pieces.some(x=>x.id===body.id))throw new Error("الـid ده موجود قبل كده.");
+    await api("PUT","/api/admin/pieces/"+encodeURIComponent(body.id),body);
+  });
+  $$('#dBody input[name="hall.ar"]').forEach(i=>i.setAttribute("list","halls"));
+  if(isNew){const n=$('#dBody input[name="name.en"]'),id=$('#dBody input[name="id"]');n.oninput=()=>{if(!id.dataset.touched)id.value=slug(n.value)};id.oninput=()=>id.dataset.touched=1}
+}
+function siteForm(s){
+  const isNew=!s; s=s||{lat:26.8,lon:30.8,visit:1,region:Object.keys(DATA.regions)[0]};
+  openDialog(isNew?"موقع جديد":"تعديل: "+s.name.ar,`
+    <div class="row3"><label>id<input name="id" dir="ltr" value="${esc(s.id)}" ${isNew?"":"readonly"} required placeholder="karnak"></label>
+      <label>المنطقة<select name="region">${Object.entries(DATA.regions).map(([id,r])=>`<option value="${id}" ${id===s.region?"selected":""}>${esc(r.ar)}</option>`).join("")}</select></label>
+      <label>وقت الزيارة<select name="visit">${[[.5,"نص يوم"],[1,"يوم"],[1.5,"يوم ونص"],[2,"يومين"]].map(([v,t])=>`<option value="${v}" ${+s.visit===v?"selected":""}>${t}</option>`).join("")}</select></label></div>
+    ${pair("name","الاسم",s.name)}${pair("gov","المحافظة",s.gov)}
+    <div class="row"><label>خط العرض (lat)<input name="lat" dir="ltr" inputmode="decimal" value="${s.lat}" required></label><label>خط الطول (lon)<input name="lon" dir="ltr" inputmode="decimal" value="${s.lon}" required></label></div>
+    <div><div id="pick"></div><small class="muted">دوس على الخريطة عشان تحدد المكان.</small></div>
+    ${pair("story","عن المكان",s.story,true)}${pair("how","توصل إزاي",s.how,true)}`,
+  async f=>{
+    const body={id:f.id,region:f.region,visit:+f.visit,lat:+f.lat,lon:+f.lon,name:f.name,gov:f.gov,story:f.story,how:f.how};
+    if(isNew&&DATA.sites.some(x=>x.id===body.id))throw new Error("الـid ده موجود قبل كده.");
+    await api("PUT","/api/admin/sites/"+encodeURIComponent(body.id),body);
+  });
+  if(window.L){
+    const lat=$('#dBody input[name="lat"]'),lon=$('#dBody input[name="lon"]');
+    PICK=L.map("pick").setView([s.lat,s.lon],isNew?6:12);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:18,attribution:"© OpenStreetMap © CARTO"}).addTo(PICK);
+    const m=L.marker([s.lat,s.lon]).addTo(PICK);
+    PICK.on("click",e=>{m.setLatLng(e.latlng);lat.value=e.latlng.lat.toFixed(4);lon.value=e.latlng.lng.toFixed(4)});
+    [lat,lon].forEach(i=>i.oninput=()=>{const a=+lat.value,b=+lon.value;if(a&&b)m.setLatLng([a,b])});
+    setTimeout(()=>PICK.invalidateSize(),80);
+  }
+}
+$("#dlg").addEventListener("close",()=>{if(PICK){PICK.remove();PICK=null}});
+$("#addP").onclick=()=>pieceForm(null);
+$("#addS").onclick=()=>siteForm(null);
+
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-ep],[data-dp],[data-es],[data-ds],[data-sr],[data-dr]");if(!t)return;const d=t.dataset;
+  try{
+    if(d.ep)pieceForm(DATA.pieces.find(p=>p.id===d.ep));
+    else if(d.es)siteForm(DATA.sites.find(s=>s.id===d.es));
+    else if(d.dp){if(!confirm("تمسح القطعة دي؟"))return;await api("DELETE","/api/admin/pieces/"+d.dp);toast("اتمسحت");await load()}
+    else if(d.ds){if(!confirm("تمسح الموقع ده؟"))return;await api("DELETE","/api/admin/sites/"+d.ds);toast("اتمسح");await load()}
+    else if(d.sr){await api("PUT","/api/admin/regions/"+d.sr,{ar:$(`[data-rar="${d.sr}"]`).value.trim(),en:$(`[data-ren="${d.sr}"]`).value.trim()});toast("اتحفظ ✓");await load()}
+    else if(d.dr){if(!confirm("تمسح المنطقة دي؟"))return;await api("DELETE","/api/admin/regions/"+d.dr);toast("اتمسحت");await load()}
+  }catch(err){alert(err.message)}
+});
+$("#addR").onclick=async()=>{
+  try{const id=slug($("#rId").value);if(!id)throw new Error("اكتب id بالإنجليزي");
+    await api("PUT","/api/admin/regions/"+id,{ar:$("#rAr").value.trim(),en:$("#rEn").value.trim()});
+    ["#rId","#rAr","#rEn"].forEach(s=>$(s).value="");toast("اتضافت ✓");await load()}catch(err){alert(err.message)}
+};
+start();
+</script>
+</body>
+</html>
